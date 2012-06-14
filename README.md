@@ -1,0 +1,2 @@
+smart-generator-plugin
+======================
