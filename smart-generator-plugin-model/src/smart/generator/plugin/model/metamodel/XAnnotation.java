@@ -21,6 +21,11 @@ public class XAnnotation implements Serializable {
 
 	private ArrayListMultimap<String, String> values;
 
+	public XAnnotation() {
+		super();
+		values = ArrayListMultimap.create();
+	}
+
 	public String getName() {
 		return name;
 	}
@@ -57,6 +62,23 @@ public class XAnnotation implements Serializable {
 			return false;
 		}
 		return true;
+	}
+
+	@Override
+	public String toString() {
+		StringBuilder builder = new StringBuilder();
+		builder.append("XAnnotation [");
+		if (name != null) {
+			builder.append("name=");
+			builder.append(name);
+			builder.append(", ");
+		}
+		if (values != null) {
+			builder.append("values=");
+			builder.append(values);
+		}
+		builder.append("]");
+		return builder.toString();
 	}
 
 	public String getString(String key) {

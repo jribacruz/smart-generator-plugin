@@ -1,6 +1,7 @@
 package smart.generator.plugin.model.metamodel;
 
 import java.io.Serializable;
+import java.util.HashSet;
 import java.util.Set;
 
 import org.apache.commons.collections.CollectionUtils;
@@ -34,6 +35,11 @@ public class XAttribute implements Serializable {
 	 * 
 	 */
 	private Set<XAnnotation> annotations;
+
+	public XAttribute() {
+		super();
+		this.annotations = new HashSet<XAnnotation>();
+	}
 
 	public String getName() {
 		return name;
@@ -95,6 +101,33 @@ public class XAttribute implements Serializable {
 			return false;
 		}
 		return true;
+	}
+
+	@Override
+	public String toString() {
+		StringBuilder builder = new StringBuilder();
+		builder.append("XAttribute [");
+		if (name != null) {
+			builder.append("name=");
+			builder.append(name);
+			builder.append(", ");
+		}
+		if (type != null) {
+			builder.append("type=");
+			builder.append(type);
+			builder.append(", ");
+		}
+		if (parameterizedType != null && !parameterizedType.isEmpty()) {
+			builder.append("parameterizedType=");
+			builder.append(parameterizedType);
+			builder.append(", ");
+		}
+		if (annotations != null) {
+			builder.append("annotations=");
+			builder.append(annotations);
+		}
+		builder.append("]");
+		return builder.toString();
 	}
 
 	public XAnnotation getAnnotation(final String name) {
