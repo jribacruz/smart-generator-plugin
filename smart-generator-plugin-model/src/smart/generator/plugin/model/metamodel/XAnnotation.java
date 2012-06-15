@@ -2,7 +2,8 @@ package smart.generator.plugin.model.metamodel;
 
 import java.io.Serializable;
 import java.util.List;
-import java.util.Map;
+
+import com.google.common.collect.ArrayListMultimap;
 
 /**
  * Classe que representa as anotações do metamodelo.
@@ -18,7 +19,7 @@ public class XAnnotation implements Serializable {
 	 */
 	private String name;
 
-	private Map<String, XValue> values;
+	private ArrayListMultimap<String, String> values;
 
 	public String getName() {
 		return name;
@@ -59,7 +60,11 @@ public class XAnnotation implements Serializable {
 	}
 
 	public String getString(String key) {
-		return this.values.get(key).getValue();
+		return this.values.get(key).size() > 0 ? this.values.get(key).get(0) : new String();
+	}
+
+	public String getValue() {
+		return this.values.get("value").size() > 0 ? this.values.get("value").get(0) : new String();
 	}
 
 	public List<String> getList(String key) {
