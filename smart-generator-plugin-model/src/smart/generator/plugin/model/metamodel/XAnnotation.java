@@ -34,6 +34,14 @@ public class XAnnotation implements Serializable {
 		this.name = name;
 	}
 
+	public ArrayListMultimap<String, String> getValues() {
+		return values;
+	}
+
+	public void setValues(ArrayListMultimap<String, String> values) {
+		this.values = values;
+	}
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
