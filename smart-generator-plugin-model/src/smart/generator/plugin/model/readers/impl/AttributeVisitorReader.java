@@ -31,6 +31,7 @@ public class AttributeVisitorReader implements IAttributeVisitorReader {
 				.typeArguments().get(0).toString() : null;
 	}
 
+	@SuppressWarnings("unused")
 	@Override
 	public List<XAnnotation> getAnnotations(FieldDeclaration declaration) {
 		Collection<?> singleMemberAnnotationList = CollectionUtils.select(declaration.modifiers(),
