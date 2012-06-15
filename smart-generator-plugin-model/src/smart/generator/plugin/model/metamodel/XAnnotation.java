@@ -1,7 +1,11 @@
 package smart.generator.plugin.model.metamodel;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
+
+import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.collections.Transformer;
 
 import com.google.common.collect.ArrayListMultimap;
 
@@ -90,15 +94,21 @@ public class XAnnotation implements Serializable {
 	}
 
 	public String getString(String key) {
-		return this.values.get(key).size() > 0 ? this.values.get(key).get(0) : new String();
+		return this.values.get(key).size() > 0 ? this.values.get(key).get(0).replaceAll("\"", "") : new String();
 	}
 
 	public String getValue() {
-		return this.values.get("value").size() > 0 ? this.values.get("value").get(0) : new String();
+		return this.values.get("value").size() > 0 ? this.values.get("value").get(0).replaceAll("\"", "") : new String();
 	}
 
+	@SuppressWarnings("unchecked")
 	public List<String> getList(String key) {
-		return this.values.get(key);
+		return new ArrayList<String>(CollectionUtils.collect(this.values.get(key), new Transformer() {
+			@Override
+			public Object transform(Object value) {
+				return ((String) value).replaceAll("\"", "");
+			}
+		}));
 	}
 
 	public boolean hasKey(final String key) {
