@@ -21,9 +21,9 @@ public class XModel implements Serializable {
 	private String name;
 
 	/*
-	 * Nome do pacote.
+	 * 
 	 */
-	private String packageName;
+	private String superClassName;
 
 	/*
 	 * Lista de atributos do modelo
@@ -47,12 +47,12 @@ public class XModel implements Serializable {
 		this.name = name;
 	}
 
-	public String getPackageName() {
-		return packageName;
+	public String getSuperClassName() {
+		return superClassName;
 	}
 
-	public void setPackageName(String packageName) {
-		this.packageName = packageName;
+	public void setSuperClassName(String superClassName) {
+		this.superClassName = superClassName;
 	}
 
 	public Set<XAttribute> getAttributes() {
