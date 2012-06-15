@@ -1,6 +1,8 @@
 package smart.generator.plugin.model.manager;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.eclipse.jdt.core.ICompilationUnit;
@@ -29,5 +31,9 @@ public class ModelManager {
 
 	public XModel get(ICompilationUnit unit) {
 		return models.get(unit);
+	}
+
+	public List<XModel> getModels() {
+		return new ArrayList<XModel>(models.values());
 	}
 }
