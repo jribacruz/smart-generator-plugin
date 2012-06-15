@@ -135,26 +135,26 @@ public class XModel implements Serializable {
 		return (XAttribute) CollectionUtils.find(this.attributes, new Predicate() {
 			@Override
 			public boolean evaluate(Object xattribute) {
-				return xattribute.equals(name);
+				return ((XAttribute) xattribute).getName().equals(name);
 			}
 		});
 	}
 
 	public boolean hasAttribute(final String name) {
-		return this.attributes.contains(name);
+		return this.getAttribute(name) != null;
 	}
 
 	public XAnnotation getAnnotation(final String name) {
 		return (XAnnotation) CollectionUtils.find(this.annotations, new Predicate() {
 			@Override
 			public boolean evaluate(Object xannotation) {
-				return xannotation.equals(name);
+				return ((XAnnotation) xannotation).getName().equals(name);
 			}
 		});
 	}
 
 	public boolean hasAnnotation(final String name) {
-		return this.annotations.contains(name);
+		return this.getAnnotation(name) != null;
 	}
 
 }
