@@ -12,3 +12,5 @@ Require-Bundle: org.eclipse.ui,
  org.apache.commons.io;bundle-version="2.1.0"
 Bundle-ActivationPolicy: lazy
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Export-Package: smart.generator.plugin.template.descriptor,
+ smart.generator.plugin.template.manager
