@@ -5,22 +5,22 @@ import org.eclipse.jdt.core.dom.MemberValuePair;
 
 import smart.generator.plugin.model.readers.IAnnotationReader;
 
-import com.google.common.collect.ArrayListMultimap;
+import com.google.common.collect.Multimap;
 
 public class MarkerAnnotationReader implements IAnnotationReader<MarkerAnnotation> {
 
 	@Override
-	public String name(MarkerAnnotation annotation) {
+	public String getName(MarkerAnnotation annotation) {
 		return annotation.getTypeName().toString();
 	}
 
 	@Override
-	public ArrayListMultimap<String, String> getValue(MarkerAnnotation annotation) {
+	public Multimap<String, String> getValue(MarkerAnnotation annotation) {
 		return null;
 	}
 
 	@Override
-	public ArrayListMultimap<String, String> getValue(MemberValuePair pair) {
+	public Multimap<String, String> getValue(MemberValuePair pair) {
 		return null;
 	}
 

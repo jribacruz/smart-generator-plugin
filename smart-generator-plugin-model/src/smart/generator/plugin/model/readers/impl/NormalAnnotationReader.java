@@ -1,19 +1,23 @@
 package smart.generator.plugin.model.readers.impl;
 
+import java.util.Iterator;
+
 import org.eclipse.jdt.core.dom.ArrayInitializer;
 import org.eclipse.jdt.core.dom.Expression;
 import org.eclipse.jdt.core.dom.MemberValuePair;
 import org.eclipse.jdt.core.dom.NormalAnnotation;
+import org.eclipse.jdt.core.dom.NumberLiteral;
 import org.eclipse.jdt.core.dom.StringLiteral;
 
 import smart.generator.plugin.model.readers.IAnnotationReader;
 
 import com.google.common.collect.ArrayListMultimap;
+import com.google.common.collect.Multimap;
 
 public class NormalAnnotationReader implements IAnnotationReader<NormalAnnotation> {
 
 	@Override
-	public String name(NormalAnnotation annotation) {
+	public String getName(NormalAnnotation annotation) {
 		return annotation.getTypeName().toString();
 	}
 
@@ -23,16 +27,27 @@ public class NormalAnnotationReader implements IAnnotationReader<NormalAnnotatio
 	}
 
 	@Override
-	public ArrayListMultimap<String, String> getValue(MemberValuePair pair) {
-		ArrayListMultimap<String, String> multimap = ArrayListMultimap.create();
+	public Multimap<String, String> getValue(MemberValuePair pair) {
+		Multimap<String, String> multimap = ArrayListMultimap.create();
 		Expression expression = pair.getValue();
 		if (expression.getClass() == StringLiteral.class) {
 			StringLiteral literal = (StringLiteral) expression;
 			multimap.put(pair.getName().toString(), literal.getEscapedValue());
-		} else if(expression.getClass() == ArrayInitializer.class) {
+		} else if (expression.getClass() == ArrayInitializer.class) {
 			ArrayInitializer array = (ArrayInitializer) expression;
+			Iterator<?> iterator = array.expressions().iterator();
+			while (iterator.hasNext()) {
+				Object item = iterator.next();
+				if (item.getClass() == StringLiteral.class) {
+					StringLiteral literal = (StringLiteral) item;
+					multimap.put(pair.getName().toString(), literal.getEscapedValue());
+				} else if(item.getClass() == NumberLiteral.class) {
+					NumberLiteral literal = (NumberLiteral) item;
+					multimap.put(pair.getName().toString(), literal.getToken());
+				}
+			}
 		}
-		return null;
+		return multimap;
 	}
 
 }
