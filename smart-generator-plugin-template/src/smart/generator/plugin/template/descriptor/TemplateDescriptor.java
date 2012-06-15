@@ -5,6 +5,7 @@ public class TemplateDescriptor {
 	private String output;
 	private boolean append;
 	private boolean uncapitalize;
+	private boolean appendModelName;
 
 	public String getFileName() {
 		return fileName;
@@ -40,6 +41,38 @@ public class TemplateDescriptor {
 
 	public String getFullPath() {
 		return this.output.concat("/").concat(fileName);
+	}
+
+	public boolean isAppendModelName() {
+		return appendModelName;
+	}
+
+	public void setAppendModelName(boolean appendModelName) {
+		this.appendModelName = appendModelName;
+	}
+
+	@Override
+	public String toString() {
+		StringBuilder builder = new StringBuilder();
+		builder.append("TemplateDescriptor [");
+		if (fileName != null) {
+			builder.append("fileName=");
+			builder.append(fileName);
+			builder.append(", ");
+		}
+		if (output != null) {
+			builder.append("output=");
+			builder.append(output);
+			builder.append(", ");
+		}
+		builder.append("append=");
+		builder.append(append);
+		builder.append(", uncapitalize=");
+		builder.append(uncapitalize);
+		builder.append(", appendModelName=");
+		builder.append(appendModelName);
+		builder.append("]");
+		return builder.toString();
 	}
 
 }
