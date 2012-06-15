@@ -16,7 +16,7 @@ public class ModelVisitorReader implements IModelVisitorReader {
 
 	@Override
 	public String getSuperClass(TypeDeclaration declaration) {
-		return declaration.getSuperclassType().toString();
+		return declaration.getSuperclassType() != null ? declaration.getSuperclassType().toString() : new String();
 	}
 
 	@Override
