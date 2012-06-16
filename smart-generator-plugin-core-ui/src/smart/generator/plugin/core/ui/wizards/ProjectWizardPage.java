@@ -1,10 +1,9 @@
 package smart.generator.plugin.core.ui.wizards;
 
 import org.eclipse.core.resources.IProject;
-import org.eclipse.jface.viewers.ISelectionChangedListener;
-import org.eclipse.jface.viewers.IStructuredSelection;
-import org.eclipse.jface.viewers.ListViewer;
-import org.eclipse.jface.viewers.SelectionChangedEvent;
+import org.eclipse.jface.viewers.CheckStateChangedEvent;
+import org.eclipse.jface.viewers.CheckboxTableViewer;
+import org.eclipse.jface.viewers.ICheckStateListener;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.FillLayout;
@@ -17,12 +16,14 @@ import smart.generator.plugin.core.ui.providers.ProjectLabelProvider;
 public class ProjectWizardPage extends WizardPage {
 
 	private ApplicationContext context;
-	private ListViewer listViewer;
+	private CheckboxTableViewer tableViewer;
 
 	private String projectPath;
 
 	protected ProjectWizardPage(ApplicationContext context) {
 		super("projectWizardPage");
+		setTitle("Projetos");
+		setDescription("Selecione o projeto alvo da geração.");
 		this.context = context;
 	}
 
@@ -32,20 +33,19 @@ public class ProjectWizardPage extends WizardPage {
 		FillLayout layout = new FillLayout();
 		container.setLayout(layout);
 
-		listViewer = new ListViewer(container, SWT.BORDER);
-		listViewer.setLabelProvider(new ProjectLabelProvider());
-		listViewer.setContentProvider(new ProjectContentProvider());
-		listViewer.addSelectionChangedListener(new ISelectionChangedListener() {
+		tableViewer = CheckboxTableViewer.newCheckList(container, SWT.BORDER);
+		tableViewer.setLabelProvider(new ProjectLabelProvider());
+		tableViewer.setContentProvider(new ProjectContentProvider());
+
+		tableViewer.addCheckStateListener(new ICheckStateListener() {
 
 			@Override
-			public void selectionChanged(SelectionChangedEvent event) {
-				IStructuredSelection selection = (IStructuredSelection) event.getSelection();
-				if (selection != null && !selection.isEmpty()) {
-					getWizard().getContainer().updateButtons();
-					IProject project = (IProject) selection.getFirstElement();
+			public void checkStateChanged(CheckStateChangedEvent changedEvent) {
+				getWizard().getContainer().updateButtons();
+				if (changedEvent.getChecked()) {
+					IProject project = (IProject) tableViewer.getCheckedElements()[0];
 					projectPath = project.getLocation().toString();
 				}
-
 			}
 		});
 
@@ -54,12 +54,7 @@ public class ProjectWizardPage extends WizardPage {
 	}
 
 	private void init() {
-		listViewer.setInput(context.getOpenProjectList());
-	}
-
-	@Override
-	public boolean isPageComplete() {
-		return listViewer.getSelection() != null && !listViewer.getSelection().isEmpty();
+		tableViewer.setInput(context.getOpenProjectList());
 	}
 
 	public String getProjectPath() {
@@ -68,6 +63,14 @@ public class ProjectWizardPage extends WizardPage {
 
 	public void setProjectPath(String projectPath) {
 		this.projectPath = projectPath;
+	}
+
+	public CheckboxTableViewer getTableViewer() {
+		return tableViewer;
+	}
+
+	public void setTableViewer(CheckboxTableViewer tableViewer) {
+		this.tableViewer = tableViewer;
 	}
 
 }
