@@ -58,5 +58,33 @@
          </toolbar>
       </menuContribution>
    </extension>
+   <extension
+         point="org.eclipse.ui.preferencePages">
+      <page
+            class="smart.generator.plugin.core.ui.preferences.GeneratorPreferencePage"
+            id="smart.generator.plugin.core.ui.preferences.GeneratorPreferencePage"
+            name="Smart Generator">
+      </page>
+   </extension>
+   <extension
+         point="org.eclipse.core.runtime.preferences">
+      <initializer
+            class="smart.generator.plugin.core.ui.preferences.PreferenceInitializer">
+      </initializer>
+   </extension>
+   <extension
+         point="org.eclipse.ui.newWizards">
+      <category
+            id="smart-generator-plugin-core-ui"
+            name="Smart Wizards">
+      </category>
+      <wizard
+            category="smart-generator-plugin-core-ui"
+            class="smart.generator.plugin.core.ui.wizards.GeneratorWizard"
+            icon="icons/sample.gif"
+            id="smart.generator.plugin.core.ui.wizards.GeneratorWizard"
+            name="Multi-page Editor file">
+      </wizard>
+   </extension>
 
 </plugin>
