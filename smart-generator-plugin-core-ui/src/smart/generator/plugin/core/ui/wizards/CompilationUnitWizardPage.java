@@ -1,11 +1,18 @@
 package smart.generator.plugin.core.ui.wizards;
 
+import java.util.Set;
+
+import org.eclipse.jdt.core.ICompilationUnit;
 import org.eclipse.jface.dialogs.IDialogPage;
+import org.eclipse.jface.viewers.CheckboxTableViewer;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
+
+import smart.generator.plugin.core.ui.providers.CompilationUnitContentProvider;
+import smart.generator.plugin.core.ui.providers.CompilationUnitLabelProvider;
 
 /**
  * The "New" wizard page allows setting the container for the new file as well
@@ -17,15 +24,19 @@ public class CompilationUnitWizardPage extends WizardPage {
 
 	private ISelection selection;
 
+	private CheckboxTableViewer tableViewer;
+
+	private Set<ICompilationUnit> units;
+
 	/**
 	 * Constructor for SampleNewWizardPage.
 	 * 
 	 * @param pageName
 	 */
 	public CompilationUnitWizardPage(ISelection selection) {
-		super("wizardPage");
-		setTitle("Multi-page Editor File");
-		setDescription("This wizard creates a new file with *.mpe extension that can be opened by a multi-page editor.");
+		super("compilationUnitWizardPage");
+		setTitle("Metamodelos");
+		setDescription("Selecione os metamodelos que serão usados para a geração");
 		this.selection = selection;
 	}
 
@@ -37,15 +48,26 @@ public class CompilationUnitWizardPage extends WizardPage {
 		Composite container = new Composite(parent, SWT.NULL);
 		FillLayout layout = new FillLayout();
 		container.setLayout(layout);
+
+		tableViewer = CheckboxTableViewer.newCheckList(container, SWT.BORDER);
+		tableViewer.setLabelProvider(new CompilationUnitLabelProvider());
+		tableViewer.setContentProvider(new CompilationUnitContentProvider());
+
 		initialize();
 		setControl(container);
 	}
 
-	/**
-	 * Tests if the current workbench selection is a suitable container to use.
-	 */
+	@Override
+	public boolean isPageComplete() {
+		return tableViewer.getCheckedElements().length > 0;
+	}
 
 	private void initialize() {
+		tableViewer.setInput(units);
+	}
+
+	public void setUnits(Set<ICompilationUnit> units) {
+		this.units = units;
 	}
 
 }
