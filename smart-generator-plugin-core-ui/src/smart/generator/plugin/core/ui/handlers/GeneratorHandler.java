@@ -3,9 +3,12 @@ package smart.generator.plugin.core.ui.handlers;
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
-import org.eclipse.ui.IWorkbenchWindow;
-import org.eclipse.ui.handlers.HandlerUtil;
-import org.eclipse.jface.dialogs.MessageDialog;
+
+import smart.generator.plugin.core.ui.commands.GeneratorCommand;
+import smart.generator.plugin.core.ui.module.SmartGeneratorModule;
+
+import com.google.inject.Guice;
+import com.google.inject.Injector;
 
 /**
  * Our sample handler extends AbstractHandler, an IHandler base class.
@@ -23,12 +26,11 @@ public class GeneratorHandler extends AbstractHandler {
 	 * the command has been executed, so extract extract the needed information
 	 * from the application context.
 	 */
+	@Override
 	public Object execute(ExecutionEvent event) throws ExecutionException {
-		IWorkbenchWindow window = HandlerUtil.getActiveWorkbenchWindowChecked(event);
-		MessageDialog.openInformation(
-				window.getShell(),
-				"Smart-generator-plugin-core-ui",
-				"Hello, Eclipse world");
+		Injector injector = Guice.createInjector(new SmartGeneratorModule());
+		GeneratorCommand command = injector.getInstance(GeneratorCommand.class);
+		command.execute(event);
 		return null;
 	}
 }
