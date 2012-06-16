@@ -94,19 +94,21 @@ public class XAnnotation implements Serializable {
 	}
 
 	public String getString(String key) {
-		return this.values.get(key).size() > 0 ? this.values.get(key).get(0).replaceAll("\"", "") : new String();
+		return hasKey(key) && this.values.get(key).size() > 0 ? this.values.get(key).get(0).replaceAll("\"", "")
+				: new String();
 	}
 
 	public String getValue() {
-		return this.values.get("value").size() > 0 ? this.values.get("value").get(0).replaceAll("\"", "") : new String();
+		return hasKey("value") && this.values.get("value").size() > 0 ? this.values.get("value").get(0).replaceAll("\"", "")
+				: new String();
 	}
 
 	@SuppressWarnings("unchecked")
-	public List<String> getList(String key) {
+	public List<String> getList(final String key) {
 		return new ArrayList<String>(CollectionUtils.collect(this.values.get(key), new Transformer() {
 			@Override
 			public Object transform(Object value) {
-				return ((String) value).replaceAll("\"", "");
+				return hasKey(key) ? ((String) value).replaceAll("\"", "") : new ArrayList<String>();
 			}
 		}));
 	}
