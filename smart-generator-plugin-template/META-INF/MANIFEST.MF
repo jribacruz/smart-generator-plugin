@@ -9,7 +9,11 @@ Require-Bundle: org.eclipse.ui,
  com.google.guava;bundle-version="12.0.0",
  org.apache.commons.lang;bundle-version="2.4.0",
  org.apache.commons.collections;bundle-version="3.2.0",
- org.apache.commons.io;bundle-version="2.1.0"
+ org.apache.commons.io;bundle-version="2.1.0",
+ org.apache.velocity;bundle-version="1.5.0",
+ smart-generator-plugin-model;bundle-version="1.0.0",
+ smart-generator-plugin-console;bundle-version="1.0.0",
+ com.google.inject;bundle-version="3.0.0"
 Bundle-ActivationPolicy: lazy
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Export-Package: smart.generator.plugin.template.descriptor,
