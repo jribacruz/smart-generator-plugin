@@ -1,17 +1,32 @@
 package smart.generator.plugin.core.ui.context;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Set;
 
+import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IWorkspaceRoot;
+import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.jdt.core.ICompilationUnit;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.IPackageFragment;
 import org.eclipse.jdt.core.JavaModelException;
+import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ITreeSelection;
 
+import smart.generator.plugin.console.core.Log;
+import smart.generator.plugin.core.ui.Activator;
+import smart.generator.plugin.core.ui.preferences.PreferenceConstants;
+
+import com.google.inject.Inject;
+
 public class ApplicationContext {
+
+	@Inject
+	private Log log;
 
 	private IJavaProject jproject;
 	private ISelection selection;
@@ -22,7 +37,6 @@ public class ApplicationContext {
 			try {
 				IPackageFragment[] fragments = jproject.getPackageFragments();
 				for (IPackageFragment fragment : fragments) {
-					System.out.println("Package Fragments: "+fragment.getElementName());
 					ICompilationUnit[] unitList = fragment.getCompilationUnits();
 					for (ICompilationUnit unit : unitList) {
 						units.add(unit);
@@ -32,6 +46,7 @@ public class ApplicationContext {
 				e.printStackTrace();
 			}
 		}
+		log.info("Total de compilation units selecionadas: " + units.size());
 		return units;
 	}
 
@@ -43,10 +58,26 @@ public class ApplicationContext {
 				Object item = iterator.next();
 				if (item instanceof IJavaProject) {
 					this.jproject = (IJavaProject) item;
-					System.out.println("Java Project: "+this.jproject);
 				}
 			}
 		}
+		log.info("Projeto selecionado: " + this.jproject.getElementName());
+	}
+
+	public String getRepositoryPath() {
+		IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
+		return preferenceStore.getString(PreferenceConstants.P_PATH);
+	}
+
+	public List<IProject> getOpenProjectList() {
+		List<IProject> openProjectList = new ArrayList<IProject>();
+		IWorkspaceRoot root = ResourcesPlugin.getWorkspace().getRoot();
+		for (IProject project : root.getProjects()) {
+			if (project.isOpen()) {
+				openProjectList.add(project);
+			}
+		}
+		return openProjectList;
 	}
 
 }
