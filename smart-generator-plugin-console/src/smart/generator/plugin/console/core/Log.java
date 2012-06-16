@@ -37,7 +37,7 @@ public class Log {
 		getConsoleStream().println("[INFO] " + message);
 	}
 
-	public void error(String message, Throwable exception) {
+	public void error(String message) {
 		try {
 			getConsoleStream().write("[ERROR] " + message);
 		} catch (IOException e) {
