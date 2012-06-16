@@ -1,9 +1,11 @@
 package smart.generator.plugin.core.ui.wizards;
 
 import java.lang.reflect.InvocationTargetException;
+import java.util.Set;
 
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.jdt.core.ICompilationUnit;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.jface.viewers.ISelection;
@@ -11,6 +13,14 @@ import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.ui.INewWizard;
 import org.eclipse.ui.IWorkbench;
+
+import smart.generator.plugin.console.core.Log;
+import smart.generator.plugin.core.ui.context.ApplicationContext;
+import smart.generator.plugin.model.manager.ModelManager;
+import smart.generator.plugin.model.metamodel.XModel;
+import smart.generator.plugin.template.manager.TemplateManager;
+
+import com.google.inject.Inject;
 
 /**
  * This is a sample new wizard. Its role is to create a new file resource in the
@@ -22,7 +32,23 @@ import org.eclipse.ui.IWorkbench;
  */
 
 public class GeneratorWizard extends Wizard implements INewWizard {
-	private CompilationUnitWizardPage page;
+
+	@Inject
+	private ApplicationContext context;
+
+	@Inject
+	private TemplateManager templateManager;
+
+	@Inject
+	private ModelManager modelManager;
+
+	@Inject
+	private Log log;
+
+	private CompilationUnitWizardPage compilationUnitPage;
+
+	private ProjectWizardPage projectWizardPage;
+
 	private ISelection selection;
 
 	/**
@@ -39,8 +65,13 @@ public class GeneratorWizard extends Wizard implements INewWizard {
 
 	@Override
 	public void addPages() {
-		page = new CompilationUnitWizardPage(selection);
-		addPage(page);
+
+		compilationUnitPage = new CompilationUnitWizardPage(selection);
+		compilationUnitPage.setUnits(context.getCompilationUnitList());
+		addPage(compilationUnitPage);
+
+		projectWizardPage = new ProjectWizardPage(context);
+		addPage(projectWizardPage);
 	}
 
 	/**
@@ -80,6 +111,23 @@ public class GeneratorWizard extends Wizard implements INewWizard {
 	 */
 
 	private void doFinish() throws CoreException {
+		Set<ICompilationUnit> selectedUnits = compilationUnitPage.getSelectedUnits();
+		String projectPath = projectWizardPage.getProjectPath();
+		templateManager.loadDescriptors(context.getRepositoryPath());
+		for (ICompilationUnit selectedUnit : selectedUnits) {
+			XModel model = modelManager.put(selectedUnit);
+			log.info("Modelo: " + model);
+			templateManager.write(projectPath, model);
+		}
+		context.refresh();
+	}
+
+	@Override
+	public boolean canFinish() {
+		if (projectWizardPage.getTableViewer().getCheckedElements().length > 0) {
+			return true;
+		}
+		return false;
 	}
 
 	@Override
