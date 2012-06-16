@@ -13,10 +13,22 @@ import org.eclipse.jdt.core.dom.CompilationUnit;
 import smart.generator.plugin.model.metamodel.XModel;
 import smart.generator.plugin.model.visitor.ModelVisitor;
 
+/**
+ * Classe responsavel por gerenciar os metamodelos.
+ * 
+ * @author jrmc
+ *
+ */
 public class ModelManager {
 
 	private Map<ICompilationUnit, XModel> models = new HashMap<ICompilationUnit, XModel>();
 
+	/**
+	 * Dado uma ICompilationUnit retorna o metamodelo correspondente
+	 * 
+	 * @param unit
+	 * @return
+	 */
 	public XModel put(ICompilationUnit unit) {
 		ASTParser parser = ASTParser.newParser(AST.JLS3);
 		parser.setKind(ASTParser.K_COMPILATION_UNIT);
@@ -29,6 +41,12 @@ public class ModelManager {
 		return visitor.getModel();
 	}
 
+	/**
+	 * Retorna o metamodelo correspondente
+	 * 
+	 * @param unit
+	 * @return
+	 */
 	public XModel get(ICompilationUnit unit) {
 		return models.get(unit);
 	}
