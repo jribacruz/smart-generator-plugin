@@ -1,11 +1,21 @@
 package smart.generator.plugin.template.descriptor;
 
 public class TemplateDescriptor {
+	private String templateName;
 	private String fileName;
 	private String output;
+	private String condition;
 	private boolean append;
 	private boolean uncapitalize;
 	private boolean appendModelName;
+
+	public String getTemplateName() {
+		return templateName;
+	}
+
+	public void setTemplateName(String templateName) {
+		this.templateName = templateName;
+	}
 
 	public String getFileName() {
 		return fileName;
@@ -29,6 +39,14 @@ public class TemplateDescriptor {
 
 	public void setAppend(boolean append) {
 		this.append = append;
+	}
+
+	public String getCondition() {
+		return condition;
+	}
+
+	public void setCondition(String condition) {
+		this.condition = condition;
 	}
 
 	public boolean isUncapitalize() {
@@ -55,6 +73,11 @@ public class TemplateDescriptor {
 	public String toString() {
 		StringBuilder builder = new StringBuilder();
 		builder.append("TemplateDescriptor [");
+		if (templateName != null) {
+			builder.append("templateName=");
+			builder.append(templateName);
+			builder.append(", ");
+		}
 		if (fileName != null) {
 			builder.append("fileName=");
 			builder.append(fileName);
@@ -63,6 +86,11 @@ public class TemplateDescriptor {
 		if (output != null) {
 			builder.append("output=");
 			builder.append(output);
+			builder.append(", ");
+		}
+		if (condition != null) {
+			builder.append("condition=");
+			builder.append(condition);
 			builder.append(", ");
 		}
 		builder.append("append=");
