@@ -32,26 +32,13 @@
    </extension>
    <extension
          point="org.eclipse.ui.menus">
-      <menuContribution
-            locationURI="menu:org.eclipse.ui.main.menu?after=additions">
-         <menu
-               label="Sample Menu"
-               mnemonic="M"
-               id="smart-generator-plugin-core-ui.menus.sampleMenu">
-            <command
-                  commandId="smart-generator-plugin-core-ui.commands.sampleCommand"
-                  mnemonic="S"
-                  id="smart-generator-plugin-core-ui.menus.sampleCommand">
-            </command>
-         </menu>
-      </menuContribution>
-      <menuContribution
+       <menuContribution
             locationURI="toolbar:org.eclipse.ui.main.toolbar?after=additions">
          <toolbar
                id="smart-generator-plugin-core-ui.toolbars.sampleToolbar">
             <command
                   commandId="smart-generator-plugin-core-ui.commands.sampleCommand"
-                  icon="icons/sample.gif"
+                  icon="icons/sg.gif"
                   tooltip="Say hello world"
                   id="smart-generator-plugin-core-ui.toolbars.sampleCommand">
             </command>
@@ -81,7 +68,7 @@
       <wizard
             category="smart-generator-plugin-core-ui"
             class="smart.generator.plugin.core.ui.wizards.GeneratorWizard"
-            icon="icons/sample.gif"
+            icon="icons/sg.gif"
             id="smart.generator.plugin.core.ui.wizards.GeneratorWizard"
             name="Multi-page Editor file">
       </wizard>
