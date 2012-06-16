@@ -1,5 +1,6 @@
 package smart.generator.plugin.core.ui.wizards;
 
+import org.eclipse.core.resources.IProject;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.ListViewer;
@@ -17,6 +18,8 @@ public class ProjectWizardPage extends WizardPage {
 
 	private ApplicationContext context;
 	private ListViewer listViewer;
+
+	private String projectPath;
 
 	protected ProjectWizardPage(ApplicationContext context) {
 		super("projectWizardPage");
@@ -39,6 +42,8 @@ public class ProjectWizardPage extends WizardPage {
 				IStructuredSelection selection = (IStructuredSelection) event.getSelection();
 				if (selection != null && !selection.isEmpty()) {
 					getWizard().getContainer().updateButtons();
+					IProject project = (IProject) selection.getFirstElement();
+					projectPath = project.getLocation().toString();
 				}
 
 			}
@@ -55,6 +60,14 @@ public class ProjectWizardPage extends WizardPage {
 	@Override
 	public boolean isPageComplete() {
 		return listViewer.getSelection() != null && !listViewer.getSelection().isEmpty();
+	}
+
+	public String getProjectPath() {
+		return projectPath;
+	}
+
+	public void setProjectPath(String projectPath) {
+		this.projectPath = projectPath;
 	}
 
 }
