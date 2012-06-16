@@ -6,6 +6,7 @@ import java.util.Set;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.Predicate;
+import org.apache.commons.lang.StringUtils;
 
 /**
  * Classe que representa os atributos do modelo
@@ -128,6 +129,76 @@ public class XAttribute implements Serializable {
 		}
 		builder.append("]");
 		return builder.toString();
+	}
+
+	public String getGetter() {
+		StringBuffer buffer = new StringBuffer();
+		buffer.append("public ");
+		buffer.append(this.getType());
+		if (this.parameterizedType != null) {
+			buffer.append("<");
+			buffer.append(this.parameterizedType);
+			buffer.append(">");
+		}
+		buffer.append(" get");
+		buffer.append(StringUtils.capitalize(this.getName()));
+		buffer.append("() {");
+		buffer.append(" return this.");
+		buffer.append(this.getName() + ";");
+		buffer.append("}");
+		return buffer.toString();
+	}
+
+	public String getSetter() {
+		StringBuffer buffer = new StringBuffer();
+		buffer.append("public void set");
+		buffer.append(StringUtils.capitalize(this.getName()));
+		buffer.append("(");
+		buffer.append(this.getType());
+		if (this.parameterizedType != null) {
+			buffer.append("<");
+			buffer.append(this.parameterizedType);
+			buffer.append(">");
+		}
+		buffer.append(" ");
+		buffer.append(this.getName());
+		buffer.append(") {");
+		buffer.append("this.");
+		buffer.append(this.getName());
+		buffer.append("=" + this.getName() + ";");
+		buffer.append("}");
+
+		return buffer.toString();
+	}
+
+	public String getFullType() {
+		StringBuffer buffer = new StringBuffer();
+		buffer.append(this.getType());
+		if (this.getParameterizedType() != null) {
+			buffer.append("<");
+			buffer.append(this.parameterizedType);
+			buffer.append(">");
+		}
+		return buffer.toString();
+	}
+
+	public String getInstance() {
+		StringBuffer buffer = new StringBuffer();
+		if (type.equals("List")) {
+			buffer.append("new ArrayList<");
+			buffer.append(parameterizedType);
+			buffer.append(">();");
+		} else if (type.equals("Set")) {
+			buffer.append("new HashSet<");
+			buffer.append(parameterizedType);
+			buffer.append(">();");
+		} else if (type.equals("Collection")) {
+			buffer.append("new ArrayList<");
+			buffer.append(parameterizedType);
+			buffer.append(">();");
+		}
+
+		return buffer.toString();
 	}
 
 	public XAnnotation getAnnotation(final String name) {
