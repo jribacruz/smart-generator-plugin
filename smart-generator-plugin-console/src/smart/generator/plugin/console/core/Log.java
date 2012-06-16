@@ -12,7 +12,7 @@ public class Log {
 
 	private static final String SMART_GENERATOR_CONSOLE_NAME = "Smart Generator";
 
-	private static MessageConsole getConsole() {
+	private MessageConsole getConsole() {
 		ConsolePlugin plugin = ConsolePlugin.getDefault();
 		IConsoleManager conMan = plugin.getConsoleManager();
 		IConsole[] existing = conMan.getConsoles();
@@ -27,17 +27,17 @@ public class Log {
 		return myConsole;
 	}
 
-	private static MessageConsoleStream getConsoleStream() {
+	private MessageConsoleStream getConsoleStream() {
 		MessageConsole myConsole = getConsole();
 		MessageConsoleStream out = myConsole.newMessageStream();
 		return out;
 	}
 
-	public static void info(String message) {
+	public void info(String message) {
 		getConsoleStream().println("[INFO] " + message);
 	}
 
-	public static void error(String message, Throwable exception) {
+	public void error(String message, Throwable exception) {
 		try {
 			getConsoleStream().write("[ERROR] " + message);
 		} catch (IOException e) {
