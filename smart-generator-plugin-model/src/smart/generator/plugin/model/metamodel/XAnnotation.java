@@ -113,6 +113,10 @@ public class XAnnotation implements Serializable {
 		}));
 	}
 
+	public List<String> getList() {
+		return this.getList("value");
+	}
+
 	public boolean hasKey(final String key) {
 		return this.values.containsKey(key);
 	}
