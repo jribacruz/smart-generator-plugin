@@ -120,8 +120,11 @@ public class TemplateManager {
 			Template template = Velocity.getTemplate(descriptor.getTemplateName().concat(".vm"));
 			template.merge(context, writer);
 		} catch (ResourceNotFoundException e) {
+			log.error("Recurso não existe: " + e.getMessage());
 			e.printStackTrace();
 		} catch (ParseErrorException e) {
+			log.error("Erro de parser: " + e.getTemplateName() + " linha: " + e.getLineNumber() + " coluna: "
+					+ e.getColumnNumber());
 			e.printStackTrace();
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -159,6 +162,13 @@ public class TemplateManager {
 		return descriptors;
 	}
 
+	/**
+	 * Verifica se o template esta declarado no metamodelo
+	 * 
+	 * @param model
+	 * @param descriptor
+	 * @return
+	 */
 	private boolean hasTemplate(XModel model, final TemplateDescriptor descriptor) {
 		return CollectionUtils.exists(model.getAnnotations(), new Predicate() {
 			@Override
