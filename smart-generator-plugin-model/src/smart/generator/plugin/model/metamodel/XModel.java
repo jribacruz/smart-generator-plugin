@@ -90,7 +90,10 @@ public class XModel implements Serializable {
 	}
 
 	public String getPackageName() {
-		return packageName;
+		if (hasAnnotation("Package")) {
+			return getAnnotation("Package").getString("value");
+		}
+		return new String();
 	}
 
 	public void setPackageName(String packageName) {
