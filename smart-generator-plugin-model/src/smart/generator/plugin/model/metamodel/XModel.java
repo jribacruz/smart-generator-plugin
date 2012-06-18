@@ -22,7 +22,7 @@ public class XModel implements Serializable {
 	private String name;
 
 	/*
-	 * 
+	 * Nome da super classe
 	 */
 	private String superClassName;
 
@@ -30,6 +30,11 @@ public class XModel implements Serializable {
 	 * Lista de atributos do modelo
 	 */
 	private Set<XAttribute> attributes;
+
+	/*
+	 * Nome do pacote
+	 */
+	private String packageName;
 
 	/*
 	 * 
@@ -74,6 +79,14 @@ public class XModel implements Serializable {
 		this.annotations = annotations;
 	}
 
+	public String getPackageName() {
+		return packageName;
+	}
+
+	public void setPackageName(String packageName) {
+		this.packageName = packageName;
+	}
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -113,7 +126,7 @@ public class XModel implements Serializable {
 			builder.append(name);
 			builder.append(", ");
 		}
-		if (superClassName != null && !superClassName.isEmpty()) {
+		if (superClassName != null) {
 			builder.append("superClassName=");
 			builder.append(superClassName);
 			builder.append(", ");
@@ -121,6 +134,11 @@ public class XModel implements Serializable {
 		if (attributes != null) {
 			builder.append("attributes=");
 			builder.append(attributes);
+			builder.append(", ");
+		}
+		if (packageName != null) {
+			builder.append("packageName=");
+			builder.append(packageName);
 			builder.append(", ");
 		}
 		if (annotations != null) {
