@@ -11,13 +11,14 @@ import org.eclipse.jdt.core.dom.ASTParser;
 import org.eclipse.jdt.core.dom.CompilationUnit;
 
 import smart.generator.plugin.model.metamodel.XModel;
+import smart.generator.plugin.model.processor.ModelProcessor;
 import smart.generator.plugin.model.visitor.ModelVisitor;
 
 /**
  * Classe responsavel por gerenciar os metamodelos.
  * 
  * @author jrmc
- *
+ * 
  */
 public class ModelManager {
 
@@ -37,8 +38,9 @@ public class ModelManager {
 		CompilationUnit cunit = (CompilationUnit) parser.createAST(null);
 		ModelVisitor visitor = new ModelVisitor();
 		cunit.accept(visitor);
-		models.put(unit, visitor.getModel());
-		return visitor.getModel();
+		ModelProcessor processor = new ModelProcessor(visitor.getModel());
+		models.put(unit, processor.getModel());
+		return processor.getModel();
 	}
 
 	/**
