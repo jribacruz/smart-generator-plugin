@@ -170,6 +170,16 @@ public class XModel implements Serializable {
 		if (annotations != null) {
 			builder.append("annotations=");
 			builder.append(annotations);
+			builder.append(", ");
+		}
+		if (templates != null) {
+			builder.append("templates=");
+			builder.append(templates);
+			builder.append(", ");
+		}
+		if (imports != null) {
+			builder.append("imports=");
+			builder.append(imports);
 		}
 		builder.append("]");
 		return builder.toString();
