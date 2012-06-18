@@ -41,6 +41,16 @@ public class XModel implements Serializable {
 	 */
 	private Set<XAnnotation> annotations;
 
+	/*
+	 * Lista de templates
+	 */
+	private Set<XTemplate> templates;
+
+	/*
+	 * Lista de imports
+	 */
+	private Set<XImport> imports;
+
 	public XModel() {
 		super();
 		this.attributes = new HashSet<XAttribute>();
@@ -85,6 +95,22 @@ public class XModel implements Serializable {
 
 	public void setPackageName(String packageName) {
 		this.packageName = packageName;
+	}
+
+	public Set<XTemplate> getTemplates() {
+		return templates;
+	}
+
+	public void setTemplates(Set<XTemplate> templates) {
+		this.templates = templates;
+	}
+
+	public Set<XImport> getImports() {
+		return imports;
+	}
+
+	public void setImports(Set<XImport> imports) {
+		this.imports = imports;
 	}
 
 	@Override
