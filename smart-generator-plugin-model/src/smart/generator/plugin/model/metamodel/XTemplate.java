@@ -1,8 +1,12 @@
 package smart.generator.plugin.model.metamodel;
 
-
 public class XTemplate {
 	private String template;
+
+	public XTemplate(String template) {
+		super();
+		this.template = template;
+	}
 
 	public String getTemplate() {
 		return template;

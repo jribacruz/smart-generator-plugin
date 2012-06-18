@@ -3,6 +3,11 @@ package smart.generator.plugin.model.metamodel;
 public class XImport {
 	private String value;
 
+	public XImport(String value) {
+		super();
+		this.value = value;
+	}
+
 	public String getValue() {
 		return value;
 	}
