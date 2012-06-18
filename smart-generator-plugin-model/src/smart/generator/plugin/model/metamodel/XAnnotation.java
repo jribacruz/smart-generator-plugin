@@ -117,6 +117,24 @@ public class XAnnotation implements Serializable {
 		return this.getList("value");
 	}
 
+	@SuppressWarnings("unchecked")
+	public List<String> getPropertyList(final String key) {
+		return new ArrayList<String>(CollectionUtils.collect(this.values.get(key), new Transformer() {
+			@Override
+			public Object transform(Object value) {
+				return hasKey(key) ? ((String) value) : new ArrayList<String>();
+			}
+		}));
+	}
+
+	public String getPropertyValue() {
+		return hasKey("value") && this.values.get("value").size() > 0 ? this.values.get("value").get(0) : new String();
+	}
+
+	public String getPropertyString(String key) {
+		return hasKey(key) && this.values.get(key).size() > 0 ? this.values.get(key).get(0) : new String();
+	}
+
 	public boolean hasKey(final String key) {
 		return this.values.containsKey(key);
 	}
