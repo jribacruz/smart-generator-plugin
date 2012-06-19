@@ -205,13 +205,13 @@ public class XAttribute implements Serializable {
 		return (XAnnotation) CollectionUtils.find(this.annotations, new Predicate() {
 			@Override
 			public boolean evaluate(Object xannotation) {
-				return xannotation.equals(name);
+				return ((XAnnotation) xannotation).getName().equals(name);
 			}
 		});
 	}
 
 	public boolean hasAnnotation(final String name) {
-		return this.annotations.contains(name);
+		return this.getAnnotation(name) != null;
 	}
 
 }
