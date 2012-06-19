@@ -7,6 +7,7 @@ import org.eclipse.jdt.core.dom.Expression;
 import org.eclipse.jdt.core.dom.MemberValuePair;
 import org.eclipse.jdt.core.dom.NormalAnnotation;
 import org.eclipse.jdt.core.dom.NumberLiteral;
+import org.eclipse.jdt.core.dom.QualifiedName;
 import org.eclipse.jdt.core.dom.StringLiteral;
 
 import smart.generator.plugin.model.readers.IAnnotationReader;
@@ -44,8 +45,14 @@ public class NormalAnnotationReader implements IAnnotationReader<NormalAnnotatio
 				} else if(item.getClass() == NumberLiteral.class) {
 					NumberLiteral literal = (NumberLiteral) item;
 					multimap.put(pair.getName().toString(), literal.getToken());
+				} else if(item.getClass() == QualifiedName.class) {
+					QualifiedName qualifiedName = (QualifiedName) item;
+					multimap.put(pair.getName().toString(), qualifiedName.getFullyQualifiedName());
 				}
 			}
+		} else if(expression.getClass() == QualifiedName.class) {
+			QualifiedName qualifiedName = (QualifiedName) expression;
+			multimap.put(pair.getName().toString(), qualifiedName.getFullyQualifiedName());
 		}
 		return multimap;
 	}
