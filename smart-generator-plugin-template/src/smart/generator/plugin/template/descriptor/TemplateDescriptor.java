@@ -4,7 +4,6 @@ public class TemplateDescriptor {
 	private String templateName;
 	private String fileName;
 	private String output;
-	private String condition;
 	private boolean append;
 	private boolean uncapitalize;
 	private boolean appendModelName;
@@ -39,14 +38,6 @@ public class TemplateDescriptor {
 
 	public void setAppend(boolean append) {
 		this.append = append;
-	}
-
-	public String getCondition() {
-		return condition;
-	}
-
-	public void setCondition(String condition) {
-		this.condition = condition;
 	}
 
 	public boolean isUncapitalize() {
@@ -86,11 +77,6 @@ public class TemplateDescriptor {
 		if (output != null) {
 			builder.append("output=");
 			builder.append(output);
-			builder.append(", ");
-		}
-		if (condition != null) {
-			builder.append("condition=");
-			builder.append(condition);
 			builder.append(", ");
 		}
 		builder.append("append=");

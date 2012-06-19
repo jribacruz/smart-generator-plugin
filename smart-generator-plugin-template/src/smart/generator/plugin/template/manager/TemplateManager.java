@@ -155,7 +155,6 @@ public class TemplateManager {
 		descriptor.setUncapitalize(uncapitalize);
 		descriptor.setOutput(fileOutput);
 		descriptor.setAppendModelName(StringUtils.isEmpty(fileName) ? true : false);
-		descriptor.setCondition(condition);
 		return descriptor;
 	}
 
