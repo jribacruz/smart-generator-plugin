@@ -20,8 +20,8 @@ import org.apache.velocity.exception.ResourceNotFoundException;
 
 import smart.generator.plugin.console.core.Log;
 import smart.generator.plugin.model.manager.ModelManager;
-import smart.generator.plugin.model.metamodel.XAnnotation;
 import smart.generator.plugin.model.metamodel.XModel;
+import smart.generator.plugin.model.metamodel.XTemplate;
 import smart.generator.plugin.template.descriptor.TemplateDescriptor;
 import smart.generator.plugin.template.service.FileService;
 
@@ -49,6 +49,7 @@ public class TemplateManager {
 				log.info("Descriptor: " + descriptor.getTemplateName());
 				descriptor.setOutput(projectPath.concat("/").concat(this.subsDescriptor(model, descriptor))
 						.replaceAll("\\.", "/"));
+				log.info("Output: " + descriptor.getOutput());
 				if (descriptor.isAppendModelName()) {
 					descriptor.setFileName(model.getName().concat(descriptor.getFileName()));
 				}
@@ -100,7 +101,7 @@ public class TemplateManager {
 
 	private String subsDescriptor(XModel model, TemplateDescriptor descriptor) {
 		Map<String, String> map = new HashMap<String, String>();
-		map.put("PACKAGE_DIR", model.getAnnotation("Package").getString("name"));
+		map.put("PACKAGE_DIR", model.getPackageName());
 		map.put("entity", model.getName().toLowerCase());
 		StrSubstitutor substitutor = new StrSubstitutor(map, "@", "@");
 		return substitutor.replace(descriptor.getOutput());
@@ -170,11 +171,11 @@ public class TemplateManager {
 	 * @return
 	 */
 	private boolean hasTemplate(XModel model, final TemplateDescriptor descriptor) {
-		return CollectionUtils.exists(model.getAnnotations(), new Predicate() {
+		return CollectionUtils.exists(model.getTemplates(), new Predicate() {
 			@Override
-			public boolean evaluate(Object annotation) {
-				XAnnotation xannotation = (XAnnotation) annotation;
-				return xannotation.getList("names").contains(descriptor.getTemplateName());
+			public boolean evaluate(Object template) {
+				XTemplate xtemplate = (XTemplate) template;
+				return xtemplate.getTemplate().equals((descriptor.getTemplateName()));
 			}
 		});
 	}
