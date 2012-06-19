@@ -2,10 +2,13 @@ package smart.generator.plugin.model.metamodel;
 
 import java.io.Serializable;
 import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Set;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.Predicate;
+import org.apache.commons.lang.StringUtils;
 
 /**
  * Classe que representa o metamodelo
@@ -35,6 +38,8 @@ public class XModel implements Serializable {
 	 * Nome do pacote
 	 */
 	private String packageName;
+
+	private String instanceName;
 
 	/*
 	 * 
@@ -114,6 +119,14 @@ public class XModel implements Serializable {
 
 	public void setImports(Set<XImport> imports) {
 		this.imports = imports;
+	}
+
+	public String getInstanceName() {
+		return StringUtils.uncapitalize(this.name);
+	}
+
+	public void setInstanceName(String instanceName) {
+		this.instanceName = instanceName;
 	}
 
 	@Override
@@ -214,4 +227,44 @@ public class XModel implements Serializable {
 		return this.getAnnotation(name) != null;
 	}
 
+	public boolean isCoreAnnotation(XAnnotation annotation) {
+		for (XImport importData : this.imports) {
+			if (importData.getValue().replaceAll("\"", "").endsWith(annotation.getName())) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	public String getCoreAnnotation(XAnnotation annotation) {
+		StringBuilder builder = new StringBuilder();
+
+		builder.append("@");
+		builder.append(annotation.getName());
+
+		if (annotation.getValues().size() > 0) {
+			builder.append("(");
+			Iterator<String> iterator = annotation.getValues().keySet().iterator();
+			while (iterator.hasNext()) {
+				String key = iterator.next();
+				List<String> values = annotation.getValues().get(key);
+				builder.append(key);
+				builder.append("=");
+				if (values.size() > 1) {
+					builder.append("{");
+				}
+				if (values.size() == 1) {
+					builder.append(values.get(0));
+				} else if (values.size() > 1) {
+					builder.append(StringUtils.join(values, ","));
+				}
+				if (values.size() > 1) {
+					builder.append("}");
+				}
+			}
+			builder.append(")");
+		}
+
+		return builder.toString();
+	}
 }
