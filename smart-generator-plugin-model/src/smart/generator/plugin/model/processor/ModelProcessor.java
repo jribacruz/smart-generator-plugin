@@ -4,6 +4,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import smart.generator.plugin.console.core.Log;
 import smart.generator.plugin.model.metamodel.XAttribute;
 import smart.generator.plugin.model.metamodel.XImport;
 import smart.generator.plugin.model.metamodel.XModel;
@@ -11,6 +12,8 @@ import smart.generator.plugin.model.metamodel.XTemplate;
 
 public class ModelProcessor {
 	private XModel model;
+
+	private Log log = new Log();
 
 	public ModelProcessor(XModel model) {
 		super();
@@ -30,7 +33,10 @@ public class ModelProcessor {
 			for (XAttribute attribute : model.getAttributes()) {
 				if (attribute.hasAnnotation("Template")) {
 					List<String> attributeTemplateList = attribute.getAnnotation("Template").getList();
-					modelTemplateList.addAll(attributeTemplateList);
+					// modelTemplateList.addAll(attributeTemplateList);
+					for (String attributeTemplate : attributeTemplateList) {
+						templates.add(new XTemplate(attributeTemplate));
+					}
 				}
 			}
 			for (String template : modelTemplateList) {
@@ -46,14 +52,18 @@ public class ModelProcessor {
 			List<String> modelTemplateList = model.getAnnotation("Import").getList();
 			for (XAttribute attribute : model.getAttributes()) {
 				if (attribute.hasAnnotation("Import")) {
-					List<String> attributeTemplateList = attribute.getAnnotation("Import").getList();
-					modelTemplateList.addAll(attributeTemplateList);
+					List<String> attributeImportList = attribute.getAnnotation("Import").getList();
+					// modelTemplateList.addAll(attributeTemplateList);
+					for (String attributeImport : attributeImportList) {
+						imports.add(new XImport(attributeImport));
+					}
 				}
 			}
 			for (String importItem : modelTemplateList) {
 				imports.add(new XImport(importItem));
 			}
 		}
+		log.info("Imports: "+imports);
 		model.setImports(imports);
 	}
 
