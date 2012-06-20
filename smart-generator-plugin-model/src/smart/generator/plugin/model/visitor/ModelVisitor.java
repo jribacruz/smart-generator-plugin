@@ -65,28 +65,24 @@ public class ModelVisitor extends ASTVisitor {
 
 	@SuppressWarnings("unchecked")
 	private Collection<XAnnotation> processMarkerAnnotation(BodyDeclaration node) {
-		Collection<MarkerAnnotation> mkAnnotation = CollectionUtils
-				.select(node.modifiers(), new MarkerAnnotationPredicate());
-		Collection<XAnnotation> mkXAnnotations = CollectionUtils.collect(mkAnnotation, new MarkerAnnotationTransformer());
-		return mkXAnnotations;
+		Collection<MarkerAnnotation> markerAnnotationList = CollectionUtils.select(node.modifiers(),
+				new MarkerAnnotationPredicate());
+		return CollectionUtils.collect(markerAnnotationList, new MarkerAnnotationTransformer());
 	}
 
 	@SuppressWarnings("unchecked")
 	private Collection<XAnnotation> processSingleMemberAnnotation(BodyDeclaration node) {
-		Collection<SingleMemberAnnotation> smAnnotation = CollectionUtils.select(node.modifiers(),
+		Collection<SingleMemberAnnotation> singleMemberAnnotationList = CollectionUtils.select(node.modifiers(),
 				new SingleMemberAnnotationPredicate());
-		Collection<XAnnotation> smXAnnotation = CollectionUtils.collect(smAnnotation,
-				new SingleMemberAnnotationTransformer());
-		return smXAnnotation;
+		return CollectionUtils.collect(singleMemberAnnotationList, new SingleMemberAnnotationTransformer());
 	}
 
 	@SuppressWarnings("unchecked")
 	private Collection<XAnnotation> processNormalAnnotation(BodyDeclaration node) {
-		Collection<NormalAnnotation> noAnnotation = CollectionUtils
-				.select(node.modifiers(), new NormalAnnotationPredicate());
+		Collection<NormalAnnotation> normalAnnotationList = CollectionUtils.select(node.modifiers(),
+				new NormalAnnotationPredicate());
 
-		Collection<XAnnotation> noXAnnotations = CollectionUtils.collect(noAnnotation, new NormalAnnotationTransformer());
-		return noXAnnotations;
+		return CollectionUtils.collect(normalAnnotationList, new NormalAnnotationTransformer());
 	}
 
 	public XModel getModel() {
