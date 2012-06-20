@@ -36,6 +36,7 @@ public class TemplateLoaderManager {
 
 	public boolean init(String repositoryPath) {
 		this.repositoryFile = new File(repositoryPath);
+		log.info("Loader inicializado.");
 		load();
 		return this.repositoryFile.exists();
 	}
