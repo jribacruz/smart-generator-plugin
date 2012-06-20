@@ -18,7 +18,6 @@ import smart.generator.plugin.console.core.Log;
 import smart.generator.plugin.core.ui.context.ApplicationContext;
 import smart.generator.plugin.model.manager.ModelManager;
 import smart.generator.plugin.model.metamodel.XModel;
-import smart.generator.plugin.template.manager.TemplateManager;
 
 import com.google.inject.Inject;
 
@@ -35,9 +34,6 @@ public class GeneratorWizard extends Wizard implements INewWizard {
 
 	@Inject
 	private ApplicationContext context;
-
-	@Inject
-	private TemplateManager templateManager;
 
 	@Inject
 	private ModelManager modelManager;
@@ -113,11 +109,9 @@ public class GeneratorWizard extends Wizard implements INewWizard {
 	private void doFinish() throws CoreException {
 		Set<ICompilationUnit> selectedUnits = compilationUnitPage.getSelectedUnits();
 		String projectPath = projectWizardPage.getProjectPath();
-		templateManager.loadDescriptors(context.getRepositoryPath());
 		for (ICompilationUnit selectedUnit : selectedUnits) {
 			XModel model = modelManager.put(selectedUnit);
 			log.info("Modelo: " + model);
-			templateManager.write(projectPath, model);
 		}
 		context.refresh();
 	}
