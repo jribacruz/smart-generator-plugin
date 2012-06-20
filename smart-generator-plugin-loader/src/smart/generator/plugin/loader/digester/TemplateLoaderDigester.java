@@ -6,12 +6,16 @@ import java.io.IOException;
 import org.apache.commons.digester.Digester;
 import org.xml.sax.SAXException;
 
+import smart.generator.plugin.console.core.Log;
 import smart.generator.plugin.loader.model.Configuration;
 import smart.generator.plugin.loader.model.Dependencies;
 import smart.generator.plugin.loader.model.Dependency;
 import smart.generator.plugin.loader.model.Template;
 
 public class TemplateLoaderDigester {
+
+	private Log log = new Log();
+
 	public Configuration digester(File configurationFile) {
 		Digester digester = new Digester();
 		digester.setValidating(false);
@@ -55,9 +59,9 @@ public class TemplateLoaderDigester {
 		try {
 			configuration = (Configuration) digester.parse(configurationFile);
 		} catch (IOException e) {
-			e.printStackTrace();
+			log.error(e.getMessage());
 		} catch (SAXException e) {
-			e.printStackTrace();
+			log.error(e.getMessage());
 		}
 
 		return configuration;
