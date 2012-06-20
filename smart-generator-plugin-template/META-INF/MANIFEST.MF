@@ -18,4 +18,5 @@ Require-Bundle: org.eclipse.ui,
 Bundle-ActivationPolicy: lazy
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Export-Package: smart.generator.plugin.template.descriptor,
- smart.generator.plugin.template.manager
+ smart.generator.plugin.template.manager,
+ smart.generator.plugin.template.service
