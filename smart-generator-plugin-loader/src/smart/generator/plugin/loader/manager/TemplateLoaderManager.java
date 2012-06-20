@@ -67,7 +67,7 @@ public class TemplateLoaderManager {
 
 		@Override
 		public Configuration apply(File file) {
-			String configPath = FilenameUtils.concat(repositoryFile.getAbsolutePath(), "configuration.xml");
+			String configPath = FilenameUtils.concat(file.getAbsolutePath(), "configuration.xml");
 			File configFile = new File(configPath);
 			log.info("Carregando arquivo de configuração: " + configPath);
 			TemplateLoaderDigester digester = new TemplateLoaderDigester();
