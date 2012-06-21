@@ -5,8 +5,11 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
+import java.util.Properties;
 
 import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.lang.StringUtils;
+import org.apache.velocity.app.Velocity;
 
 import smart.generator.plugin.console.core.Log;
 import smart.generator.plugin.loader.digester.TemplateLoaderDigester;
@@ -28,9 +31,12 @@ public class TemplateLoaderManager {
 
 	private Collection<TemplateDescriptor> descriptors;
 
+	private Collection<String> templatePathList;
+
 	public TemplateLoaderManager() {
 		super();
 		this.descriptors = new ArrayList<TemplateDescriptor>();
+		this.templatePathList = new ArrayList<String>();
 
 	}
 
@@ -38,6 +44,7 @@ public class TemplateLoaderManager {
 		this.repositoryFile = new File(repositoryPath);
 		log.info("Loader inicializado.");
 		load();
+		initVelocity();
 		return this.repositoryFile.exists();
 	}
 
@@ -55,8 +62,21 @@ public class TemplateLoaderManager {
 				Collection<TemplateDescriptor> templateDescriptorList = Collections2.transform(configuration.getTemplates(),
 						new FunctionTemplateDescriptor());
 				this.descriptors.addAll(templateDescriptorList);
-				log.info("Total de descriptor carregados: "+templateDescriptorList.size());
+				log.info("Total de descriptor carregados: " + templateDescriptorList.size());
 			}
+		}
+	}
+
+	private void initVelocity() {
+		Properties properties = new Properties();
+		properties.put("resource.loader", "file");
+		properties.put("file.resource.loader.class", "org.apache.velocity.runtime.resource.loader.FileResourceLoader");
+		properties.put("file.resource.loader.path", StringUtils.join(templatePathList, ","));
+		log.info("Path de templates: " + StringUtils.join(templatePathList, ","));
+		try {
+			Velocity.init(properties);
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 	}
 
@@ -74,6 +94,7 @@ public class TemplateLoaderManager {
 		public Configuration apply(File file) {
 			String configPath = FilenameUtils.concat(file.getAbsolutePath(), "configuration.xml");
 			File configFile = new File(configPath);
+			templatePathList.add(file.getAbsolutePath());
 			log.info("Carregando arquivo de configuração: " + configPath + " Existe: " + configFile.exists());
 			TemplateLoaderDigester digester = new TemplateLoaderDigester();
 			return digester.digester(configFile);
