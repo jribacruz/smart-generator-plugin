@@ -5,23 +5,31 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
+import smart.generator.plugin.console.core.Log;
 import smart.generator.plugin.model.descriptors.TemplateDescriptor;
+
+import com.google.inject.Inject;
 
 public class FileService {
 
+	@Inject
+	private Log log;
+
 	public void write(String projectPath, TemplateDescriptor descriptor, byte[] data) {
-		File outputdir = new File(descriptor.getFileOutput());
+		File outputdir = new File(projectPath + "/" + descriptor.getFileOutput().replaceAll("\\.", "/"));
 		makeDirectories(outputdir);
-		File file = new File(projectPath + "/" + outputdir);
+		File file = new File(outputdir + "/" + descriptor.getFileName());
+		log.info("Diretorio de saida: " + file.getAbsolutePath());
 		try {
-			FileOutputStream outputStream = new FileOutputStream(file);
+			FileOutputStream outputStream = new FileOutputStream(file, descriptor.isFileAppend());
 			outputStream.write(data);
 			outputStream.flush();
 			outputStream.close();
+			log.info("Arquivo escritor com sucesso: " + file.getName());
 		} catch (FileNotFoundException e) {
-			e.printStackTrace();
+			log.error(e.getMessage());
 		} catch (IOException e) {
-			e.printStackTrace();
+			log.error(e.getMessage());
 		}
 	}
 
