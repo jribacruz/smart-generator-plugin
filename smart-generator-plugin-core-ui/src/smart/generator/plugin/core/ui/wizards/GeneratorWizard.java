@@ -16,8 +16,10 @@ import org.eclipse.ui.IWorkbench;
 
 import smart.generator.plugin.console.core.Log;
 import smart.generator.plugin.core.ui.context.ApplicationContext;
+import smart.generator.plugin.loader.manager.TemplateLoaderManager;
 import smart.generator.plugin.model.manager.ModelManager;
 import smart.generator.plugin.model.metamodel.XModel;
+import smart.generator.plugin.writer.manager.TemplateWriterManager;
 
 import com.google.inject.Inject;
 
@@ -37,6 +39,12 @@ public class GeneratorWizard extends Wizard implements INewWizard {
 
 	@Inject
 	private ModelManager modelManager;
+
+	@Inject
+	private TemplateLoaderManager loaderManager;
+
+	@Inject
+	private TemplateWriterManager writerManager;
 
 	@Inject
 	private Log log;
@@ -109,11 +117,14 @@ public class GeneratorWizard extends Wizard implements INewWizard {
 	private void doFinish() throws CoreException {
 		Set<ICompilationUnit> selectedUnits = compilationUnitPage.getSelectedUnits();
 		String projectPath = projectWizardPage.getProjectPath();
+		loaderManager.init(context.getRepositoryPath());
+		log.info("Descriptor: " + loaderManager.getDescriptors());
 		for (ICompilationUnit selectedUnit : selectedUnits) {
 			XModel model = modelManager.put(selectedUnit);
 			log.info("Modelo: " + model);
+			writerManager.write(loaderManager.getDescriptors(), projectPath, model);
 		}
-		context.refresh();
+		// context.refresh();
 	}
 
 	@Override
