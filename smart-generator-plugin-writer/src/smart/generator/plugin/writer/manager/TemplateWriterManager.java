@@ -1,9 +1,13 @@
 package smart.generator.plugin.writer.manager;
 
 import java.io.StringWriter;
+import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.collections.Closure;
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.velocity.Template;
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.Velocity;
@@ -14,8 +18,11 @@ import smart.generator.plugin.console.core.Log;
 import smart.generator.plugin.model.descriptors.TemplateDescriptor;
 import smart.generator.plugin.model.manager.ModelManager;
 import smart.generator.plugin.model.metamodel.XModel;
+import smart.generator.plugin.model.metamodel.XTemplate;
 import smart.generator.plugin.writer.utils.TemplateUtils;
 
+import com.google.common.base.Predicate;
+import com.google.common.collect.Collections2;
 import com.google.inject.Inject;
 
 public class TemplateWriterManager {
@@ -26,7 +33,34 @@ public class TemplateWriterManager {
 	@Inject
 	private ModelManager manager;
 
-	public void write() {
+	public TemplateWriterManager() {
+		super();
+	}
+
+	public void write(List<TemplateDescriptor> descriptors, String projectPath, final XModel model) {
+		log.info("Iniciando escrita: " + model.getName());
+		initContext(model);
+		Collection<TemplateDescriptor> selectedDescriptorList = Collections2.filter(descriptors,
+				new Predicate<TemplateDescriptor>() {
+			@Override
+			public boolean apply(TemplateDescriptor descriptor) {
+				return model.getTemplates().contains(new XTemplate(descriptor.getTemplateName()));
+			}
+		});
+
+		log.info("Total de template para modelo: " + model.getName() + " " + selectedDescriptorList.size());
+		log.info("Templates para modelo: " + model.getName() + " : " + selectedDescriptorList);
+
+		CollectionUtils.forAllDo(selectedDescriptorList, new Closure() {
+
+			@Override
+			public void execute(Object descriptorItem) {
+				TemplateDescriptor descriptor = (TemplateDescriptor) descriptorItem;
+				descriptor.setFileOutput(substitutorDescriptor(model, descriptor));
+				String data = substitutorData(model, merge(model, descriptor));
+				log.info("\n" + data);
+			}
+		});
 
 	}
 
