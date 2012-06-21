@@ -6,6 +6,7 @@ import smart.generator.plugin.core.ui.context.ApplicationContext;
 import smart.generator.plugin.core.ui.wizards.GeneratorWizard;
 import smart.generator.plugin.loader.manager.TemplateLoaderManager;
 import smart.generator.plugin.model.manager.ModelManager;
+import smart.generator.plugin.writer.manager.TemplateWriterManager;
 
 import com.google.inject.AbstractModule;
 import com.google.inject.Scopes;
@@ -20,6 +21,7 @@ public class SmartGeneratorModule extends AbstractModule {
 		bind(GeneratorWizard.class);
 		bind(Log.class);
 		bind(TemplateLoaderManager.class);
+		bind(TemplateWriterManager.class);
 	}
 
 }
