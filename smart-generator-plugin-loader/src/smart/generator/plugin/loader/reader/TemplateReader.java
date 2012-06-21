@@ -27,7 +27,7 @@ public class TemplateReader {
 	}
 
 	public boolean getFileUncapitalize(Template template) {
-		return template.isUncapitalize();
+		return template.isFileUncapitalize();
 	}
 
 	public String getFileExtention(Template template) {

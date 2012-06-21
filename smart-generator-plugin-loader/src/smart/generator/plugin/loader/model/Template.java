@@ -9,7 +9,7 @@ public class Template {
 	private String fileExtention;
 	private String description;
 	private boolean fileAppend;
-	private boolean uncapitalize;
+	private boolean fileUncapitalize;
 
 	public Template() {
 		super();
@@ -79,12 +79,12 @@ public class Template {
 		this.fileAppend = fileAppend;
 	}
 
-	public boolean isUncapitalize() {
-		return uncapitalize;
+	public boolean isFileUncapitalize() {
+		return fileUncapitalize;
 	}
 
-	public void setUncapitalize(boolean uncapitalize) {
-		this.uncapitalize = uncapitalize;
+	public void setFileUncapitalize(boolean fileUncapitalize) {
+		this.fileUncapitalize = fileUncapitalize;
 	}
 
 }
