@@ -49,8 +49,13 @@ public class TemplateLoaderManager {
 					new FunctionConfiguration());
 			/* gera os template descriptors */
 			for (Configuration configuration : configurations) {
-				this.descriptors.addAll(Collections2.transform(configuration.getTemplates(),
-						new FunctionTemplateDescriptor()));
+				log.info("Inicializando Template Descriptor");
+				List<Template> templates = configuration.getTemplates();
+				log.info("Lista de templates carregada: " + templates.size());
+				Collection<TemplateDescriptor> templateDescriptorList = Collections2.transform(configuration.getTemplates(),
+						new FunctionTemplateDescriptor());
+				this.descriptors.addAll(templateDescriptorList);
+				log.info("Total de descriptor carregados: "+templateDescriptorList.size());
 			}
 		}
 	}
@@ -69,7 +74,7 @@ public class TemplateLoaderManager {
 		public Configuration apply(File file) {
 			String configPath = FilenameUtils.concat(file.getAbsolutePath(), "configuration.xml");
 			File configFile = new File(configPath);
-			log.info("Carregando arquivo de configuração: " + configPath);
+			log.info("Carregando arquivo de configuração: " + configPath + " Existe: " + configFile.exists());
 			TemplateLoaderDigester digester = new TemplateLoaderDigester();
 			return digester.digester(configFile);
 		}
@@ -78,10 +83,10 @@ public class TemplateLoaderManager {
 
 	private class FunctionTemplateDescriptor implements Function<Template, TemplateDescriptor> {
 
-		private TemplateReader reader = new TemplateReader();
-
 		@Override
 		public TemplateDescriptor apply(Template template) {
+			log.info("Processando template: " + template.getTemplateName());
+			TemplateReader reader = new TemplateReader();
 			TemplateDescriptor descriptor = new TemplateDescriptor();
 			descriptor.setAppendModelName(reader.appendModelName(template));
 			descriptor.setFileAppend(reader.getFileAppend(template));
