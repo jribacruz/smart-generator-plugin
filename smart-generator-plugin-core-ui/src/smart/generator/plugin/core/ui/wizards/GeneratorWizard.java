@@ -124,7 +124,7 @@ public class GeneratorWizard extends Wizard implements INewWizard {
 			log.info("Modelo: " + model);
 			writerManager.write(loaderManager.getDescriptors(), projectPath, model);
 		}
-		// context.refresh();
+		context.refresh();
 	}
 
 	@Override
