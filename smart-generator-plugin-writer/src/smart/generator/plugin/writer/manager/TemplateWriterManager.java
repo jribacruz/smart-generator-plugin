@@ -19,6 +19,7 @@ import smart.generator.plugin.model.descriptors.TemplateDescriptor;
 import smart.generator.plugin.model.manager.ModelManager;
 import smart.generator.plugin.model.metamodel.XModel;
 import smart.generator.plugin.model.metamodel.XTemplate;
+import smart.generator.plugin.writer.service.FileService;
 import smart.generator.plugin.writer.utils.TemplateUtils;
 
 import com.google.common.base.Predicate;
@@ -33,11 +34,14 @@ public class TemplateWriterManager {
 	@Inject
 	private ModelManager manager;
 
+	@Inject
+	private FileService service;
+
 	public TemplateWriterManager() {
 		super();
 	}
 
-	public void write(List<TemplateDescriptor> descriptors, String projectPath, final XModel model) {
+	public void write(List<TemplateDescriptor> descriptors, final String projectPath, final XModel model) {
 		log.info("Iniciando escrita: " + model.getName());
 		initContext(model);
 		Collection<TemplateDescriptor> selectedDescriptorList = Collections2.filter(descriptors,
@@ -58,7 +62,8 @@ public class TemplateWriterManager {
 				TemplateDescriptor descriptor = (TemplateDescriptor) descriptorItem;
 				descriptor.setFileOutput(substitutorDescriptor(model, descriptor));
 				String data = substitutorData(model, merge(model, descriptor));
-				log.info("\n" + data);
+				log.info("Path do Projeto: " + projectPath);
+				service.write(projectPath, descriptor, data.getBytes());
 			}
 		});
 
