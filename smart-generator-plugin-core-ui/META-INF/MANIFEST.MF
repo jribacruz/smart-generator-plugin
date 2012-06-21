@@ -15,6 +15,7 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.jdt;bundle-version="3.7.2",
  org.eclipse.jdt.core;bundle-version="3.7.3",
  smart-generator-plugin-console;bundle-version="1.0.0",
- smart-generator-plugin-loader;bundle-version="1.0.0"
+ smart-generator-plugin-loader;bundle-version="1.0.0",
+ smart-generator-plugin-writer;bundle-version="1.0.0"
 Bundle-ActivationPolicy: lazy
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
