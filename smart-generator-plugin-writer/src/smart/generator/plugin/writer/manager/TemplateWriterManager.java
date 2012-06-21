@@ -61,6 +61,9 @@ public class TemplateWriterManager {
 			public void execute(Object descriptorItem) {
 				TemplateDescriptor descriptor = (TemplateDescriptor) descriptorItem;
 				descriptor.setFileOutput(substitutorDescriptor(model, descriptor));
+				if (descriptor.isAppendModelName()) {
+					descriptor.setFileName(model.getName() + descriptor.getFileName());
+				}
 				String data = substitutorData(model, merge(model, descriptor));
 				log.info("Path do Projeto: " + projectPath);
 				service.write(projectPath, descriptor, data.getBytes());
