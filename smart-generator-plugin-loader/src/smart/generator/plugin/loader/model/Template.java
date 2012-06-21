@@ -87,4 +87,51 @@ public class Template {
 		this.fileUncapitalize = fileUncapitalize;
 	}
 
+	@Override
+	public String toString() {
+		StringBuilder builder = new StringBuilder();
+		builder.append("Template [");
+		if (templateName != null) {
+			builder.append("templateName=");
+			builder.append(templateName);
+			builder.append(", ");
+		}
+		if (fileName != null) {
+			builder.append("fileName=");
+			builder.append(fileName);
+			builder.append(", ");
+		}
+		if (fileSuffix != null) {
+			builder.append("fileSuffix=");
+			builder.append(fileSuffix);
+			builder.append(", ");
+		}
+		if (fileOutput != null) {
+			builder.append("fileOutput=");
+			builder.append(fileOutput);
+			builder.append(", ");
+		}
+		if (filePreffix != null) {
+			builder.append("filePreffix=");
+			builder.append(filePreffix);
+			builder.append(", ");
+		}
+		if (fileExtention != null) {
+			builder.append("fileExtention=");
+			builder.append(fileExtention);
+			builder.append(", ");
+		}
+		if (description != null) {
+			builder.append("description=");
+			builder.append(description);
+			builder.append(", ");
+		}
+		builder.append("fileAppend=");
+		builder.append(fileAppend);
+		builder.append(", fileUncapitalize=");
+		builder.append(fileUncapitalize);
+		builder.append("]");
+		return builder.toString();
+	}
+
 }

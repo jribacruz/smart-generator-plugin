@@ -42,4 +42,21 @@ public class Configuration {
 		return templateList;
 	}
 
+	@Override
+	public String toString() {
+		StringBuilder builder = new StringBuilder();
+		builder.append("Configuration [");
+		if (template != null) {
+			builder.append("template=");
+			builder.append(template);
+			builder.append(", ");
+		}
+		if (dependencies != null) {
+			builder.append("dependencies=");
+			builder.append(dependencies);
+		}
+		builder.append("]");
+		return builder.toString();
+	}
+
 }

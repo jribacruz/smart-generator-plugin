@@ -1,6 +1,5 @@
 package smart.generator.plugin.loader.model;
 
-
 public class Dependency {
 	private Template template;
 
@@ -14,6 +13,18 @@ public class Dependency {
 
 	public void setTemplate(Template template) {
 		this.template = template;
+	}
+
+	@Override
+	public String toString() {
+		StringBuilder builder = new StringBuilder();
+		builder.append("Dependency [");
+		if (template != null) {
+			builder.append("template=");
+			builder.append(template);
+		}
+		builder.append("]");
+		return builder.toString();
 	}
 
 }

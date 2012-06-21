@@ -23,4 +23,17 @@ public class Dependencies {
 		this.dependencyList = dependency;
 	}
 
+	@Override
+	public String toString() {
+		StringBuilder builder = new StringBuilder();
+		builder.append("Dependencies [");
+		if (dependencyList != null) {
+			builder.append("dependencyList=");
+			builder.append(dependencyList);
+		}
+		builder.append("]");
+		return builder.toString();
+	}
+
+
 }
