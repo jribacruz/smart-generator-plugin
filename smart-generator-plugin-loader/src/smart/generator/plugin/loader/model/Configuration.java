@@ -3,9 +3,6 @@ package smart.generator.plugin.loader.model;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.google.common.base.Function;
-import com.google.common.collect.Collections2;
-
 public class Configuration {
 	private Template template;
 	private Dependencies dependencies;
@@ -33,12 +30,11 @@ public class Configuration {
 	public List<Template> getTemplates() {
 		List<Template> templateList = new ArrayList<Template>();
 		templateList.add(this.template);
-		templateList.addAll(Collections2.transform(dependencies.getDependencyList(), new Function<Dependency, Template>() {
-			@Override
-			public Template apply(Dependency dependencyItem) {
-				return dependencyItem.getTemplate();
+		if (dependencies != null) {
+			for (Dependency dependency : dependencies.getDependencyList()) {
+				templateList.add(dependency.getTemplate());
 			}
-		}));
+		}
 		return templateList;
 	}
 
