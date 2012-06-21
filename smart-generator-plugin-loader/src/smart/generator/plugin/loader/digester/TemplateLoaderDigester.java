@@ -2,11 +2,14 @@ package smart.generator.plugin.loader.digester;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.io.StringWriter;
 
 import org.apache.commons.digester.Digester;
 import org.xml.sax.SAXException;
 
 import smart.generator.plugin.console.core.Log;
+import smart.generator.plugin.loader.Activator;
 import smart.generator.plugin.loader.model.Configuration;
 import smart.generator.plugin.loader.model.Dependencies;
 import smart.generator.plugin.loader.model.Dependency;
@@ -19,6 +22,9 @@ public class TemplateLoaderDigester {
 	public Configuration digester(File configurationFile) {
 		Digester digester = new Digester();
 		digester.setValidating(false);
+
+		digester.setClassLoader(Activator.class.getClassLoader());
+
 		digester.addObjectCreate("configuration", Configuration.class);
 		digester.addObjectCreate("configuration/template", Template.class);
 
@@ -58,10 +64,16 @@ public class TemplateLoaderDigester {
 		Configuration configuration = new Configuration();
 		try {
 			configuration = (Configuration) digester.parse(configurationFile);
+			log.info("Digester finalizado: " + configuration);
 		} catch (IOException e) {
-			log.error(e.getMessage());
+			StringWriter stringWriter = new StringWriter();
+			e.printStackTrace(new PrintWriter(stringWriter));
+			log.error(stringWriter.toString());
+
 		} catch (SAXException e) {
-			log.error(e.getMessage());
+			StringWriter stringWriter = new StringWriter();
+			e.printStackTrace(new PrintWriter(stringWriter));
+			log.error(stringWriter.toString());
 		}
 
 		return configuration;
