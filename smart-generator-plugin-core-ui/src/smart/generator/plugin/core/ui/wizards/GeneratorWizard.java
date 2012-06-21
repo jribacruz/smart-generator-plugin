@@ -119,10 +119,14 @@ public class GeneratorWizard extends Wizard implements INewWizard {
 		String projectPath = projectWizardPage.getProjectPath();
 		loaderManager.init(context.getRepositoryPath());
 		log.info("Descriptor: " + loaderManager.getDescriptors());
+
+		/* inicializando o writer manager com o caminho do projeto e a lista de descriptors */
+		writerManager.init(projectPath, loaderManager.getDescriptors());
 		for (ICompilationUnit selectedUnit : selectedUnits) {
+
 			XModel model = modelManager.put(selectedUnit);
 			log.info("Modelo: " + model);
-			writerManager.write(loaderManager.getDescriptors(), projectPath, model);
+			writerManager.write(model);
 		}
 		context.refresh();
 	}
