@@ -8,6 +8,7 @@ import java.util.Map;
 
 import org.apache.commons.collections.Closure;
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang.text.StrSubstitutor;
 import org.apache.velocity.Template;
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.Velocity;
@@ -15,6 +16,7 @@ import org.apache.velocity.exception.ParseErrorException;
 import org.apache.velocity.exception.ResourceNotFoundException;
 
 import smart.generator.plugin.console.core.Log;
+import smart.generator.plugin.loader.model.Application;
 import smart.generator.plugin.model.descriptors.ModelDescriptor;
 import smart.generator.plugin.model.descriptors.TemplateDescriptor;
 import smart.generator.plugin.model.manager.ModelManager;
@@ -53,16 +55,30 @@ public class TemplateWriterManager {
 		this.projectPath = projectPath;
 	}
 
-	public void write(final XModel model) {
-		this.initMap(model);
+	public void write(final XModel model, Application application) {
+		this.initMap(model, application);
 		Collection<ModelDescriptor> selectedDescriptorList = this.getSelectedDescriptorList(descriptors, model);
 		this.executeWrite(selectedDescriptorList, projectPath, model);
 
 	}
 
-	private void initMap(XModel model) {
+	private void initMap(XModel model, Application application) {
 		maps.put("entity", model.getInstanceName());
 		maps.put("package", model.getPackageName());
+		if(application != null) {
+			maps.putAll(application.getProperties(maps));
+		}
+		log.info("Map:");
+		log.info(maps.toString());
+		log.info("");
+	}
+
+	public Map<String, String> getKeys() {
+		return this.maps;
+	}
+
+	public void appKeys(Map<String, String> map) {
+		this.maps.putAll(map);
 	}
 
 	private Collection<ModelDescriptor> getSelectedDescriptorList(List<TemplateDescriptor> descriptors, final XModel model) {
@@ -124,6 +140,7 @@ public class TemplateWriterManager {
 		} catch (Exception e) {
 			log.error(e.getMessage());
 		}
-		return writer.toString().getBytes();
+		StrSubstitutor substitutor = new StrSubstitutor(maps, "@", "@");
+		return substitutor.replace(writer.toString()).getBytes();
 	}
 }
