@@ -13,13 +13,8 @@ public class TemplateReader {
 		return template.isFileAppend();
 	}
 
-	public boolean appendModelName(Template template) {
-		return StringUtils.isEmpty(template.getFileName());
-	}
-
 	public String getFileName(Template template) {
-		return template.getFilePreffix() + template.getFileName() + template.getFileSuffix() + "."
-				+ template.getFileExtention();
+		return template.getFileName();
 	}
 
 	public String getFileOutput(Template template) {
@@ -40,5 +35,9 @@ public class TemplateReader {
 
 	public String getFileSuffix(Template template) {
 		return template.getFileSuffix();
+	}
+
+	public boolean appendModelName(Template template) {
+		return StringUtils.isEmpty(template.getFileName());
 	}
 }
