@@ -62,7 +62,7 @@ public class TemplateWriterManager {
 
 	private void initMap(XModel model) {
 		maps.put("entity", model.getInstanceName());
-		maps.put("pacakage", model.getPackageName());
+		maps.put("package", model.getPackageName());
 	}
 
 	private Collection<ModelDescriptor> getSelectedDescriptorList(List<TemplateDescriptor> descriptors, final XModel model) {
