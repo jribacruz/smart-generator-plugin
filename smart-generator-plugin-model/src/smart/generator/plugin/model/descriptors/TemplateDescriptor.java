@@ -8,9 +8,9 @@ public class TemplateDescriptor {
 	private boolean fileAppend;
 	private String fileSuffix;
 	private String filePreffix;
+	private String fileExtention;
 	private boolean fileAuto;
 	private boolean fileUncapitalize;
-	private boolean appendModelName;
 
 	public TemplateDescriptor() {
 		super();
@@ -88,12 +88,12 @@ public class TemplateDescriptor {
 		this.fileUncapitalize = fileUncapitalize;
 	}
 
-	public boolean isAppendModelName() {
-		return appendModelName;
+	public String getFileExtention() {
+		return fileExtention;
 	}
 
-	public void setAppendModelName(boolean appendModelName) {
-		this.appendModelName = appendModelName;
+	public void setFileExtention(String fileExtention) {
+		this.fileExtention = fileExtention;
 	}
 
 	@Override
@@ -135,6 +135,11 @@ public class TemplateDescriptor {
 			builder.append(templateName);
 			builder.append(", ");
 		}
+		if (templatePath != null) {
+			builder.append("templatePath=");
+			builder.append(templatePath);
+			builder.append(", ");
+		}
 		if (fileName != null) {
 			builder.append("fileName=");
 			builder.append(fileName);
@@ -147,12 +152,21 @@ public class TemplateDescriptor {
 		}
 		builder.append("fileAppend=");
 		builder.append(fileAppend);
-		builder.append(", fileAuto=");
+		builder.append(", ");
+		if (fileSuffix != null) {
+			builder.append("fileSuffix=");
+			builder.append(fileSuffix);
+			builder.append(", ");
+		}
+		if (filePreffix != null) {
+			builder.append("filePreffix=");
+			builder.append(filePreffix);
+			builder.append(", ");
+		}
+		builder.append("fileAuto=");
 		builder.append(fileAuto);
 		builder.append(", fileUncapitalize=");
 		builder.append(fileUncapitalize);
-		builder.append(", appendModelName=");
-		builder.append(appendModelName);
 		builder.append("]");
 		return builder.toString();
 	}
