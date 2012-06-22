@@ -2,6 +2,7 @@ package smart.generator.plugin.model.descriptors;
 
 public class TemplateDescriptor {
 	private String templateName;
+	private String templatePath;
 	private String fileName;
 	private String fileOutput;
 	private boolean fileAppend;
@@ -21,6 +22,14 @@ public class TemplateDescriptor {
 
 	public void setTemplateName(String templateName) {
 		this.templateName = templateName;
+	}
+
+	public String getTemplatePath() {
+		return templatePath;
+	}
+
+	public void setTemplatePath(String templatePath) {
+		this.templatePath = templatePath;
 	}
 
 	public String getFileName() {
