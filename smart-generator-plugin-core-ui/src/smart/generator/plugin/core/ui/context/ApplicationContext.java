@@ -31,6 +31,7 @@ public class ApplicationContext {
 
 	private IJavaProject jproject;
 	private ISelection selection;
+	private String projectMetamodelPath;
 
 	public Set<ICompilationUnit> getCompilationUnitList() {
 		Set<ICompilationUnit> units = new HashSet<ICompilationUnit>();
@@ -62,7 +63,10 @@ public class ApplicationContext {
 				}
 			}
 		}
+
 		log.info("Projeto selecionado: " + this.jproject.getElementName());
+		this.projectMetamodelPath = jproject.getProject().getLocation().toString();
+		log.info("Projeto Location: " + this.projectMetamodelPath);
 	}
 
 	public String getRepositoryPath() {
@@ -82,7 +86,7 @@ public class ApplicationContext {
 	}
 
 	public void refresh() {
-		if(jproject != null) {
+		if (jproject != null) {
 			IProject project = jproject.getProject();
 			try {
 				project.refreshLocal(IProject.DEPTH_INFINITE, null);
@@ -92,4 +96,7 @@ public class ApplicationContext {
 		}
 	}
 
+	public String getProjectMetamodelPath() {
+		return this.projectMetamodelPath;
+	}
 }
