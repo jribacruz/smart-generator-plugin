@@ -20,6 +20,10 @@ public class ModelDescriptorReader {
 		this.model = model;
 	}
 
+	public String getTemplateName() {
+		return descriptor.getTemplateName();
+	}
+
 	public String getFileName() {
 		StringBuilder builder = new StringBuilder();
 		builder.append(descriptor.getFilePreffix());
@@ -37,7 +41,7 @@ public class ModelDescriptorReader {
 
 	public String getFileOutput() {
 		StrSubstitutor substitutor = new StrSubstitutor(maps, "@", "@");
-		return substitutor.replace(descriptor.getFileOutput());
+		return substitutor.replace(descriptor.getFileOutput()).replaceAll("\\.", "/");
 	}
 
 	public boolean isFileAppend() {
