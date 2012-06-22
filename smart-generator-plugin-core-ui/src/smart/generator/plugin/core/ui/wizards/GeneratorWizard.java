@@ -17,6 +17,7 @@ import org.eclipse.ui.IWorkbench;
 import smart.generator.plugin.console.core.Log;
 import smart.generator.plugin.core.ui.context.ApplicationContext;
 import smart.generator.plugin.loader.manager.TemplateLoaderManager;
+import smart.generator.plugin.loader.model.Application;
 import smart.generator.plugin.model.manager.ModelManager;
 import smart.generator.plugin.model.metamodel.XModel;
 import smart.generator.plugin.writer.manager.TemplateWriterManager;
@@ -117,16 +118,21 @@ public class GeneratorWizard extends Wizard implements INewWizard {
 	private void doFinish() throws CoreException {
 		Set<ICompilationUnit> selectedUnits = compilationUnitPage.getSelectedUnits();
 		String projectPath = projectWizardPage.getProjectPath();
-		loaderManager.init(context.getRepositoryPath());
+		loaderManager.init(projectPath, context.getProjectMetamodelPath(), context.getRepositoryPath());
 		log.info("Descriptor: " + loaderManager.getDescriptors());
 
-		/* inicializando o writer manager com o caminho do projeto e a lista de descriptors */
+		Application application = loaderManager.getApplication();
+
+		/*
+		 * inicializando o writer manager com o caminho do projeto e a lista de
+		 * descriptors
+		 */
 		writerManager.init(projectPath, loaderManager.getDescriptors());
 		for (ICompilationUnit selectedUnit : selectedUnits) {
 
 			XModel model = modelManager.put(selectedUnit);
 			log.info("Modelo: " + model);
-			writerManager.write(model);
+			writerManager.write(model, application);
 		}
 		context.refresh();
 	}
