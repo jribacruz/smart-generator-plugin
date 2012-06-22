@@ -64,7 +64,7 @@ public class TemplateLoaderDigester {
 		Configuration configuration = new Configuration();
 		try {
 			configuration = (Configuration) digester.parse(configurationFile);
-			log.info("Digester finalizado: " + configuration);
+			log.info("Digester configuration finalizado: " + configuration);
 		} catch (IOException e) {
 			StringWriter stringWriter = new StringWriter();
 			e.printStackTrace(new PrintWriter(stringWriter));
