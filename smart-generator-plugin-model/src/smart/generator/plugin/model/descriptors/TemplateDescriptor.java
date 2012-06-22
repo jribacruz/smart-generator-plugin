@@ -5,6 +5,8 @@ public class TemplateDescriptor {
 	private String fileName;
 	private String fileOutput;
 	private boolean fileAppend;
+	private String fileSuffix;
+	private String filePreffix;
 	private boolean fileAuto;
 	private boolean fileUncapitalize;
 	private boolean appendModelName;
@@ -51,6 +53,22 @@ public class TemplateDescriptor {
 
 	public void setFileAuto(boolean fileAuto) {
 		this.fileAuto = fileAuto;
+	}
+
+	public String getFileSuffix() {
+		return fileSuffix;
+	}
+
+	public void setFileSuffix(String fileSuffix) {
+		this.fileSuffix = fileSuffix;
+	}
+
+	public String getFilePreffix() {
+		return filePreffix;
+	}
+
+	public void setFilePreffix(String filePreffix) {
+		this.filePreffix = filePreffix;
 	}
 
 	public boolean isFileUncapitalize() {
