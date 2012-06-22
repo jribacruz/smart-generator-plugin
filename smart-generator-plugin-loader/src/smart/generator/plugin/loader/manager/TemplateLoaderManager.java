@@ -9,7 +9,6 @@ import java.util.Properties;
 
 import org.apache.commons.collections.Closure;
 import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.velocity.app.Velocity;
 
@@ -54,12 +53,13 @@ public class TemplateLoaderManager {
 		if (repositoryFile.exists() && repositoryFile.isDirectory()) {
 			log.info("Lendo repositorio: " + repositoryFile.getAbsolutePath());
 
+			List<File> configurationFiles = Arrays.asList(repositoryFile.listFiles());
 			/*
 			 * Carrega a lista de todos os arquivos de configuracao que existem
 			 * nos diretorios de template
 			 */
-			Collection<File> configFileList = Collections2.filter(Arrays.asList(repositoryFile.listFiles()),
-					new PredicateConfigurationFile());
+
+			Collection<File> configFileList = Collections2.filter(configurationFiles, new PredicateConfigurationFile());
 
 			/* carrega os arquivos de configuracao */
 			Collection<Configuration> configurations = Collections2.transform(configFileList, new FunctionConfiguration());
@@ -85,7 +85,7 @@ public class TemplateLoaderManager {
 
 		@Override
 		public boolean apply(File file) {
-			String configPath = FilenameUtils.concat(file.getAbsolutePath(), "configuration.xml");
+			String configPath = file.getAbsolutePath() + "/configuration.xml";
 			File configFile = new File(configPath);
 			return configFile.exists() && !configFile.isDirectory();
 		}
@@ -96,10 +96,11 @@ public class TemplateLoaderManager {
 
 		@Override
 		public Configuration apply(File file) {
-			log.info("Carregando arquivo de configuração: " + file);
-			templatePathList.add(FilenameUtils.getBaseName(file.getAbsolutePath()));
+			File configurationFile = new File(file.getAbsoluteFile() + "/configuration.xml");
+			log.info("Carregando arquivo de configuração: " + configurationFile);
+			templatePathList.add(file.getAbsolutePath());
 			TemplateLoaderDigester digester = new TemplateLoaderDigester();
-			return digester.digester(file);
+			return digester.digester(configurationFile);
 		}
 
 	}
@@ -109,15 +110,16 @@ public class TemplateLoaderManager {
 		@Override
 		public TemplateDescriptor apply(Template template) {
 			log.info("Processando template: " + template.getTemplateName());
-			TemplateReader reader = new TemplateReader();
+			TemplateReader reader = new TemplateReader(template);
 			TemplateDescriptor descriptor = new TemplateDescriptor();
-			descriptor.setFilePreffix(reader.getFilePreffix(template));
-			descriptor.setFileSuffix(reader.getFileSuffix(template));
-			descriptor.setFileAppend(reader.getFileAppend(template));
-			descriptor.setFileName(reader.getFileName(template));
-			descriptor.setFileOutput(reader.getFileOutput(template));
-			descriptor.setFileUncapitalize(reader.getFileUncapitalize(template));
-			descriptor.setTemplateName(reader.getTemplateName(template));
+			descriptor.setFilePreffix(reader.getFilePreffix());
+			descriptor.setFileSuffix(reader.getFileSuffix());
+			descriptor.setFileAppend(reader.getFileAppend());
+			descriptor.setFileName(reader.getFileName());
+			descriptor.setFileOutput(reader.getFileOutput());
+			descriptor.setFileUncapitalize(reader.getFileUncapitalize());
+			descriptor.setFileExtention(reader.getFileExtention());
+			descriptor.setTemplateName(reader.getTemplateName());
 			log.info("Template Descriptor carregado: " + descriptor);
 			return descriptor;
 		}
@@ -130,7 +132,7 @@ public class TemplateLoaderManager {
 		public void execute(Object configurationItem) {
 			log.info("Inicializando Template Descriptor");
 			Configuration configuration = (Configuration) configurationItem;
-			//			List<Template> templates = configuration.getTemplates();
+			// List<Template> templates = configuration.getTemplates();
 			Collection<TemplateDescriptor> templateDescriptorList = Collections2.transform(configuration.getTemplates(),
 					new FunctionTemplateDescriptor());
 			descriptors.addAll(templateDescriptorList);
