@@ -111,7 +111,6 @@ public class TemplateLoaderManager {
 			log.info("Processando template: " + template.getTemplateName());
 			TemplateReader reader = new TemplateReader();
 			TemplateDescriptor descriptor = new TemplateDescriptor();
-			descriptor.setAppendModelName(reader.appendModelName(template));
 			descriptor.setFilePreffix(reader.getFilePreffix(template));
 			descriptor.setFileSuffix(reader.getFileSuffix(template));
 			descriptor.setFileAppend(reader.getFileAppend(template));
