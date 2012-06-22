@@ -1,43 +1,46 @@
 package smart.generator.plugin.loader.reader;
 
-import org.apache.commons.lang.StringUtils;
-
 import smart.generator.plugin.loader.model.Template;
 
 public class TemplateReader {
-	public String getTemplateName(Template template) {
+
+	private Template template;
+
+	public TemplateReader(Template template) {
+		super();
+		this.template = template;
+	}
+
+	public String getTemplateName() {
 		return template.getTemplateName();
 	}
 
-	public boolean getFileAppend(Template template) {
+	public boolean getFileAppend() {
 		return template.isFileAppend();
 	}
 
-	public String getFileName(Template template) {
+	public String getFileName() {
 		return template.getFileName();
 	}
 
-	public String getFileOutput(Template template) {
+	public String getFileOutput() {
 		return template.getFileOutput();
 	}
 
-	public boolean getFileUncapitalize(Template template) {
+	public boolean getFileUncapitalize() {
 		return template.isFileUncapitalize();
 	}
 
-	public String getFileExtention(Template template) {
+	public String getFileExtention() {
 		return template.getFileExtention();
 	}
 
-	public String getFilePreffix(Template template) {
+	public String getFilePreffix() {
 		return template.getFilePreffix();
 	}
 
-	public String getFileSuffix(Template template) {
+	public String getFileSuffix() {
 		return template.getFileSuffix();
 	}
 
-	public boolean appendModelName(Template template) {
-		return StringUtils.isEmpty(template.getFileName());
-	}
 }
