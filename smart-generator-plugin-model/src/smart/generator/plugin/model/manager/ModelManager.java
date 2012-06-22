@@ -10,9 +10,12 @@ import org.eclipse.jdt.core.dom.AST;
 import org.eclipse.jdt.core.dom.ASTParser;
 import org.eclipse.jdt.core.dom.CompilationUnit;
 
+import smart.generator.plugin.console.core.Log;
 import smart.generator.plugin.model.metamodel.XModel;
 import smart.generator.plugin.model.processor.ModelProcessor;
 import smart.generator.plugin.model.visitor.ModelVisitor;
+
+import com.google.inject.Inject;
 
 /**
  * Classe responsavel por gerenciar os metamodelos.
@@ -21,6 +24,9 @@ import smart.generator.plugin.model.visitor.ModelVisitor;
  * 
  */
 public class ModelManager {
+
+	@Inject
+	private Log log;
 
 	private Map<ICompilationUnit, XModel> models = new HashMap<ICompilationUnit, XModel>();
 
@@ -55,5 +61,10 @@ public class ModelManager {
 
 	public List<XModel> getModels() {
 		return new ArrayList<XModel>(models.values());
+	}
+
+	public boolean isValidModel(XModel model) {
+
+		return false;
 	}
 }
