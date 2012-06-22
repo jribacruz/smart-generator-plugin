@@ -13,7 +13,9 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.velocity.app.Velocity;
 
 import smart.generator.plugin.console.core.Log;
+import smart.generator.plugin.loader.digester.ApplicationLoaderDigester;
 import smart.generator.plugin.loader.digester.TemplateLoaderDigester;
+import smart.generator.plugin.loader.model.Application;
 import smart.generator.plugin.loader.model.Configuration;
 import smart.generator.plugin.loader.model.Template;
 import smart.generator.plugin.loader.reader.TemplateReader;
@@ -31,9 +33,13 @@ public class TemplateLoaderManager {
 
 	private File repositoryFile;
 
+	private String projectPath;
+
 	private Collection<TemplateDescriptor> descriptors;
 
 	private Collection<String> templatePathList;
+
+	private String projectMetamodelPath;
 
 	public TemplateLoaderManager() {
 		super();
@@ -41,9 +47,11 @@ public class TemplateLoaderManager {
 		this.templatePathList = new ArrayList<String>();
 	}
 
-	public boolean init(String repositoryPath) {
+	public boolean init(String projectPath, String projectMetamodelPath, String repositoryPath) {
 		log.info("Loader inicializado.");
 		this.repositoryFile = new File(repositoryPath);
+		this.projectPath = projectPath;
+		this.projectMetamodelPath = projectMetamodelPath;
 		load();
 		initVelocity();
 		return this.repositoryFile.exists();
@@ -147,6 +155,19 @@ public class TemplateLoaderManager {
 
 	public void setDescriptors(List<TemplateDescriptor> descriptors) {
 		this.descriptors = descriptors;
+	}
+
+	public Application getApplication() {
+		File file = new File(projectMetamodelPath + "/src/main/resources/application.xml");
+		if (file.exists()) {
+			ApplicationLoaderDigester applicationLoaderDigester = new ApplicationLoaderDigester();
+			Application application = applicationLoaderDigester.digester(file);
+			return application;
+		}
+		log.info("");
+		log.error("Arquivo de application não existe:" + file.getAbsolutePath());
+		log.info("");
+		return null;
 	}
 
 }
