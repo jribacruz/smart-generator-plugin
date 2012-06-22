@@ -1,7 +1,5 @@
 package smart.generator.plugin.console.core;
 
-import java.io.IOException;
-
 import org.eclipse.ui.console.ConsolePlugin;
 import org.eclipse.ui.console.IConsole;
 import org.eclipse.ui.console.IConsoleManager;
@@ -38,11 +36,7 @@ public class Log {
 	}
 
 	public void error(String message) {
-		try {
-			getConsoleStream().write("[ERROR] " + message);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		getConsoleStream().println("[ERROR] " + message);
 	}
 
 }
