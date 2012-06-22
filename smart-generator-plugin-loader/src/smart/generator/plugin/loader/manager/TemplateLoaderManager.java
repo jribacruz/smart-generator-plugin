@@ -40,12 +40,11 @@ public class TemplateLoaderManager {
 		super();
 		this.descriptors = new ArrayList<TemplateDescriptor>();
 		this.templatePathList = new ArrayList<String>();
-
 	}
 
 	public boolean init(String repositoryPath) {
-		this.repositoryFile = new File(repositoryPath);
 		log.info("Loader inicializado.");
+		this.repositoryFile = new File(repositoryPath);
 		load();
 		initVelocity();
 		return this.repositoryFile.exists();
@@ -59,13 +58,11 @@ public class TemplateLoaderManager {
 			 * Carrega a lista de todos os arquivos de configuracao que existem
 			 * nos diretorios de template
 			 */
-			Collection<File> configurationFileList = Collections2.filter(Arrays.asList(repositoryFile.listFiles()),
+			Collection<File> configFileList = Collections2.filter(Arrays.asList(repositoryFile.listFiles()),
 					new PredicateConfigurationFile());
 
 			/* carrega os arquivos de configuracao */
-			Collection<Configuration> configurations = Collections2.transform(configurationFileList,
-					new FunctionConfiguration());
-
+			Collection<Configuration> configurations = Collections2.transform(configFileList, new FunctionConfiguration());
 			/* gera os template descriptors */
 			CollectionUtils.forAllDo(configurations, new ClosureConfigurationProcessor());
 		}
@@ -84,26 +81,6 @@ public class TemplateLoaderManager {
 		}
 	}
 
-	public List<TemplateDescriptor> getDescriptors() {
-		return new ArrayList<TemplateDescriptor>(descriptors);
-	}
-
-	public void setDescriptors(List<TemplateDescriptor> descriptors) {
-		this.descriptors = descriptors;
-	}
-
-	private class FunctionConfiguration implements Function<File, Configuration> {
-
-		@Override
-		public Configuration apply(File file) {
-			templatePathList.add(FilenameUtils.getBaseName(file.getAbsolutePath()));
-			log.info("Carregando arquivo de configuração: " + file);
-			TemplateLoaderDigester digester = new TemplateLoaderDigester();
-			return digester.digester(file);
-		}
-
-	}
-
 	private class PredicateConfigurationFile implements Predicate<File> {
 
 		@Override
@@ -111,6 +88,18 @@ public class TemplateLoaderManager {
 			String configPath = FilenameUtils.concat(file.getAbsolutePath(), "configuration.xml");
 			File configFile = new File(configPath);
 			return configFile.exists() && !configFile.isDirectory();
+		}
+
+	}
+
+	private class FunctionConfiguration implements Function<File, Configuration> {
+
+		@Override
+		public Configuration apply(File file) {
+			log.info("Carregando arquivo de configuração: " + file);
+			templatePathList.add(FilenameUtils.getBaseName(file.getAbsolutePath()));
+			TemplateLoaderDigester digester = new TemplateLoaderDigester();
+			return digester.digester(file);
 		}
 
 	}
@@ -123,6 +112,8 @@ public class TemplateLoaderManager {
 			TemplateReader reader = new TemplateReader();
 			TemplateDescriptor descriptor = new TemplateDescriptor();
 			descriptor.setAppendModelName(reader.appendModelName(template));
+			descriptor.setFilePreffix(reader.getFilePreffix(template));
+			descriptor.setFileSuffix(reader.getFileSuffix(template));
 			descriptor.setFileAppend(reader.getFileAppend(template));
 			descriptor.setFileName(reader.getFileName(template));
 			descriptor.setFileOutput(reader.getFileOutput(template));
@@ -138,16 +129,23 @@ public class TemplateLoaderManager {
 
 		@Override
 		public void execute(Object configurationItem) {
-			Configuration configuration = (Configuration) configurationItem;
 			log.info("Inicializando Template Descriptor");
-			List<Template> templates = configuration.getTemplates();
-			log.info("Lista de templates carregada: " + templates.size());
+			Configuration configuration = (Configuration) configurationItem;
+			//			List<Template> templates = configuration.getTemplates();
 			Collection<TemplateDescriptor> templateDescriptorList = Collections2.transform(configuration.getTemplates(),
 					new FunctionTemplateDescriptor());
 			descriptors.addAll(templateDescriptorList);
 			log.info("Total de descriptor carregados: " + templateDescriptorList.size());
 		}
 
+	}
+
+	public List<TemplateDescriptor> getDescriptors() {
+		return new ArrayList<TemplateDescriptor>(descriptors);
+	}
+
+	public void setDescriptors(List<TemplateDescriptor> descriptors) {
+		this.descriptors = descriptors;
 	}
 
 }
