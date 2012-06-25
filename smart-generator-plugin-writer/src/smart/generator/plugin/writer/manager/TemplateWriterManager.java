@@ -21,10 +21,12 @@ import smart.generator.plugin.model.descriptors.ModelDescriptor;
 import smart.generator.plugin.model.descriptors.TemplateDescriptor;
 import smart.generator.plugin.model.manager.ModelManager;
 import smart.generator.plugin.model.metamodel.XModel;
+import smart.generator.plugin.model.metamodel.XTemplate;
 import smart.generator.plugin.writer.readers.ModelDescriptorReader;
 import smart.generator.plugin.writer.service.FileService;
 
 import com.google.common.base.Function;
+import com.google.common.base.Predicate;
 import com.google.common.collect.Collections2;
 import com.google.inject.Inject;
 
@@ -57,31 +59,30 @@ public class TemplateWriterManager {
 
 	public void write(final XModel model, Application application) {
 		this.initMap(model, application);
-		Collection<ModelDescriptor> selectedDescriptorList = this.getSelectedDescriptorList(descriptors, model);
+		Collection<TemplateDescriptor> templateDescriptorList = getTemplateDescriptorList(descriptors, model);
+		Collection<ModelDescriptor> selectedDescriptorList = this.getSelectedDescriptorList(templateDescriptorList, model);
 		this.executeWrite(selectedDescriptorList, projectPath, model);
 
 	}
 
-	private void initMap(XModel model, Application application) {
-		maps.put("entity", model.getInstanceName());
-		maps.put("package", model.getPackageName());
-		if(application != null) {
-			maps.putAll(application.getProperties(maps));
-		}
-		log.info("Map:");
-		log.info(maps.toString());
-		log.info("");
+	private Collection<TemplateDescriptor> getTemplateDescriptorList(List<TemplateDescriptor> descriptorList,
+			final XModel model) {
+		return Collections2.filter(descriptorList, new Predicate<TemplateDescriptor>() {
+			@Override
+			public boolean apply(TemplateDescriptor descriptor) {
+				return model.getTemplates().contains(new XTemplate(descriptor.getTemplateName()));
+			}
+		});
 	}
 
-	public Map<String, String> getKeys() {
-		return this.maps;
-	}
-
-	public void appKeys(Map<String, String> map) {
-		this.maps.putAll(map);
-	}
-
-	private Collection<ModelDescriptor> getSelectedDescriptorList(List<TemplateDescriptor> descriptors, final XModel model) {
+	/**
+	 * Transforma um TemplateDescriptor em ModelDescriptor
+	 * 
+	 * @param descriptors
+	 * @param model
+	 * @return
+	 */
+	private Collection<ModelDescriptor> getSelectedDescriptorList(Collection<TemplateDescriptor> descriptors, final XModel model) {
 		return Collections2.transform(descriptors, new Function<TemplateDescriptor, ModelDescriptor>() {
 			@Override
 			public ModelDescriptor apply(TemplateDescriptor templateDescriptor) {
@@ -124,6 +125,25 @@ public class TemplateWriterManager {
 		context.put("expS", "#{");
 		context.put("expE", "}");
 		return context;
+	}
+
+	private void initMap(XModel model, Application application) {
+		maps.put("entity", model.getInstanceName());
+		maps.put("package", model.getPackageName());
+		if (application != null) {
+			maps.putAll(application.getProperties(maps));
+		}
+		log.info("Map:");
+		log.info(maps.toString());
+		log.info("");
+	}
+
+	public Map<String, String> getKeys() {
+		return this.maps;
+	}
+
+	public void appKeys(Map<String, String> map) {
+		this.maps.putAll(map);
 	}
 
 	private byte[] merge(XModel model, ModelDescriptor descriptor) {
