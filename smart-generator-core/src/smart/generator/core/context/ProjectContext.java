@@ -1,14 +1,9 @@
 package smart.generator.core.context;
 
-import java.io.File;
-import java.util.Iterator;
-
 import org.eclipse.jdt.core.ICompilationUnit;
-import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
-import org.eclipse.jface.viewers.ITreeSelection;
 
 import smart.generator.core.Activator;
 import smart.generator.core.preferences.PreferenceConstants;
@@ -24,7 +19,6 @@ public class ProjectContext {
 	 * Aramazena a ICompilationUnit selecionada
 	 */
 	private ISelection selection;
-	private IJavaProject javaproject;
 
 	public ISelection getSelection() {
 		return selection;
@@ -37,25 +31,15 @@ public class ProjectContext {
 	 */
 	public void setSelection(ISelection selection) {
 		this.selection = selection;
-		if (selection != null && !selection.isEmpty()) {
-			Iterator<?> iterator = ((ITreeSelection) selection).iterator();
-			while (iterator.hasNext()) {
-				Object item = iterator.next();
-				if (item instanceof IJavaProject) {
-					this.javaproject = (IJavaProject) item;
-				}
-			}
-		}
 	}
 
 	/**
-	 * Retorna o objecto File do projeto selecionado.
 	 * 
-	 * @return Objeto File do projeto
+	 * @return
 	 */
-	public File getProjectLocation() {
-		if (this.javaproject != null) {
-			return this.javaproject.getProject().getLocation().toFile();
+	public String getProjectLocation() {
+		if (this.getSelectedCompilationUnit() != null) {
+			return this.getSelectedCompilationUnit().getJavaProject().getProject().getLocation().toString();
 		}
 		return null;
 	}
