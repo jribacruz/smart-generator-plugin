@@ -75,7 +75,7 @@ public class ProjectContext {
 	 * 
 	 * @return
 	 */
-	public ICompilationUnit getCompilationUnit() {
+	public ICompilationUnit getSelectedCompilationUnit() {
 		if (this.selection != null && !this.selection.isEmpty()) {
 			IStructuredSelection structuredSelection = (IStructuredSelection) this.selection;
 			if (structuredSelection.getFirstElement() instanceof ICompilationUnit) {
